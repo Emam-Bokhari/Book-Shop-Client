@@ -10,7 +10,6 @@ export default function Banner() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          // margin: "40px 0",
           backgroundColor: "#f0f9e9",
           borderRadius: "4px",
         }}
@@ -61,7 +60,9 @@ export default function Banner() {
               Experience the convenience of online shopping and have your books
               delivered right to your door.
             </p>
-            <Button type="primary">Explore Now</Button>
+            <Button type="primary" style={{ marginTop: "20px" }}>
+              Explore Now
+            </Button>
           </Col>
 
           {/* Right Column with Image */}
