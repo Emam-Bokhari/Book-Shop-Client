@@ -10,14 +10,16 @@ export default function Banner() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          margin: "40px 0",
+          // margin: "40px 0",
+          backgroundColor: "#f0f9e9",
+          borderRadius: "4px",
         }}
       >
         <Row
           style={{
             margin: "0 auto",
-            maxWidth: "1200px",
-            minHeight: "600px",
+            maxWidth: "1536px",
+            minHeight: "90vh",
             // border: "2px solid red",
             alignItems: "center",
           }}
@@ -44,11 +46,34 @@ export default function Banner() {
               horizons with educational material, we have something to inspire
               every reader.
             </p>
+            <h1
+              style={{
+                fontSize: "22px",
+                fontWeight: "bold",
+                marginBottom: "1rem",
+                color: "#62AB00",
+              }}
+            >
+              Start Your Reading Journey Today!{" "}
+            </h1>
+            <p style={{ fontSize: "1.2rem", lineHeight: "1.8", color: "#555" }}>
+              Explore our collection and find your next favorite read.
+              Experience the convenience of online shopping and have your books
+              delivered right to your door.
+            </p>
             <Button type="primary">Explore Now</Button>
           </Col>
 
           {/* Right Column with Image */}
-          <Col xs={24} lg={12} style={{ textAlign: "center" }}>
+          <Col
+            xs={24}
+            lg={12}
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              padding: 0,
+            }}
+          >
             <Image
               src={bannerImage}
               preview={false}

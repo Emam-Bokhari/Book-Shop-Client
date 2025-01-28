@@ -24,9 +24,9 @@ export default function Navbar() {
   return (
     <header
       style={{
-        borderBottom: "1px solid #e8e8e8",
         maxWidth: "1200px",
         margin: "auto",
+        padding: "8px 0",
       }}
     >
       <Row justify="space-between" align="middle" gutter={16}>
