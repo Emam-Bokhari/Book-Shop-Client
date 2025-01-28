@@ -26,7 +26,7 @@ export default function Navbar() {
       style={{
         maxWidth: "1200px",
         margin: "auto",
-        padding: "8px 0",
+        padding: "8px",
       }}
     >
       <Row justify="space-between" align="middle" gutter={16}>

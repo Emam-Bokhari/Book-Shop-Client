@@ -19,6 +19,7 @@ export default function Banner() {
             margin: "0 auto",
             maxWidth: "1536px",
             minHeight: "90vh",
+            padding: "8px",
             // border: "2px solid red",
             alignItems: "center",
           }}
