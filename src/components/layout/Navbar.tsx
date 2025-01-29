@@ -4,7 +4,7 @@ import { useState } from "react";
 import logo from "../../assets/logo/Green-Leaf.png";
 import { useMediaQuery } from "react-responsive";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const { Title } = Typography;
 
@@ -100,11 +100,13 @@ export default function Navbar() {
 
         {/* Buttons for Login and Signup */}
         <Col xs={0} sm={0} md={0} lg={6} style={{ textAlign: "right" }}>
-          <Button
-            icon={<ShoppingCartOutlined />}
-            type="text"
-            style={{ fontSize: "22px" }}
-          />
+          <Link to="/shopping-cart">
+            <Button
+              icon={<ShoppingCartOutlined />}
+              type="text"
+              style={{ fontSize: "22px" }}
+            />
+          </Link>
           <Button type="text" style={{ marginRight: "10px" }}>
             <NavLink to="/signin">Signin</NavLink>
           </Button>
@@ -137,21 +139,23 @@ export default function Navbar() {
         <Button type="primary" block style={{ marginTop: "10px" }}>
           <NavLink to="/signup">Signup</NavLink>
         </Button>
-        <Button
-          icon={
-            <ShoppingCartOutlined
-              style={{
-                fontSize: "20px",
-              }}
-            />
-          }
-          iconPosition="end"
-          type="primary"
-          block
-          style={{ marginTop: "20px" }}
-        >
-          Shopping Cart
-        </Button>
+        <Link to="/shopping-cart">
+          <Button
+            icon={
+              <ShoppingCartOutlined
+                style={{
+                  fontSize: "20px",
+                }}
+              />
+            }
+            iconPosition="end"
+            type="primary"
+            block
+            style={{ marginTop: "20px" }}
+          >
+            Shopping Cart
+          </Button>
+        </Link>
       </Drawer>
     </header>
   );
