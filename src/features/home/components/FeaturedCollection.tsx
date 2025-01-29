@@ -19,7 +19,7 @@ const { useToken } = theme;
 export default function FeaturedCollection() {
   const { token } = useToken();
 
-  const { data: booksData, isLoading } = useGetAllProductsQuery(undefined);
+  const { data: booksData, isFetching } = useGetAllProductsQuery(undefined);
 
   // skeleton cards
   const skeletonArray = Array.from({ length: 8 });
@@ -65,7 +65,7 @@ export default function FeaturedCollection() {
           justify="center"
           style={{ width: "100%", marginTop: "20px" }}
         >
-          {isLoading
+          {isFetching
             ? skeletonArray.map((_, index) => (
                 <Col
                   xs={24}
