@@ -4,6 +4,7 @@ import { useState } from "react";
 import logo from "../../assets/logo/Green-Leaf.png";
 import { useMediaQuery } from "react-responsive";
 import { ShoppingCartOutlined } from "@ant-design/icons";
+import { NavLink } from "react-router-dom";
 
 const { Title } = Typography;
 
@@ -11,10 +12,19 @@ export default function Navbar() {
   const [drawerVisible, setDrawerVisible] = useState(false);
 
   const menuItems = [
-    { label: "Home", key: "home" },
-    { label: "Books", key: "books" },
-    { label: "About Us", key: "about-us" },
-    { label: "Contact Us", key: "contact-us" },
+    { label: <NavLink to="/"> Home </NavLink>, key: "home" },
+    {
+      label: <NavLink to="/books"> Books </NavLink>,
+      key: "books",
+    },
+    {
+      label: <NavLink to="/about-us"> About Us </NavLink>,
+      key: "about-us",
+    },
+    {
+      label: <NavLink to="/contact-us"> Contact Us </NavLink>,
+      key: "contact-us",
+    },
   ];
 
   const toggleDrawer = () => {
@@ -96,9 +106,11 @@ export default function Navbar() {
             style={{ fontSize: "22px" }}
           />
           <Button type="text" style={{ marginRight: "10px" }}>
-            Login
+            <NavLink to="/signin">Signin</NavLink>
           </Button>
-          <Button type="primary">Signup</Button>
+          <Button type="primary">
+            <NavLink to="/signup">Signup</NavLink>
+          </Button>
         </Col>
       </Row>
 
@@ -120,10 +132,10 @@ export default function Navbar() {
           }}
         />
         <Button type="text" block style={{ marginTop: "20px" }}>
-          Login
+          <NavLink to="/signin">Signin</NavLink>
         </Button>
         <Button type="primary" block style={{ marginTop: "10px" }}>
-          Signup
+          <NavLink to="/signup">Signup</NavLink>
         </Button>
         <Button
           icon={
