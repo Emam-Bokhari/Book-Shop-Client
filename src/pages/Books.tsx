@@ -3,12 +3,14 @@ import { Fragment } from "react/jsx-runtime";
 import FilterSidebar from "../features/books/components/FilterSidebar";
 import Sort from "../features/books/components/Sort";
 import BookCard from "../components/common/BookCard";
-import { useGetAllProductsQuery } from "../redux/api/commonApi";
 import { useMediaQuery } from "react-responsive";
+import { useGetAllProductsQuery } from "../features/books/api";
+import BookCardSkeleton from "../components/skeleton/BookCardSkeleton";
 
 export default function Books() {
   const isSmallScreen = useMediaQuery({ maxWidth: 992 });
   const { data: booksData, isFetching } = useGetAllProductsQuery(undefined);
+  const skeletonArray = Array.from({ length: 8 });
   return (
     <Fragment>
       <Row
@@ -45,16 +47,24 @@ export default function Books() {
 
           {/* Books Grid */}
           <Row gutter={[16, 16]}>
-            {booksData?.data.map((book, _id) => (
-              <Col xs={24} sm={12} md={12} lg={8} xxl={6} key={_id}>
-                <BookCard
-                  title={book.title}
-                  image={book.image}
-                  price={book.price}
-                  rating={book.rating}
-                />
-              </Col>
-            ))}
+            {/*  */}
+            {isFetching
+              ? skeletonArray.map((_, index) => (
+                  <Col xs={24} sm={12} md={12} lg={8} xxl={6} key={index}>
+                    <BookCardSkeleton />
+                  </Col>
+                ))
+              : booksData?.data?.map((book, _id) => (
+                  <Col xs={24} sm={12} md={12} lg={8} xxl={6} key={_id}>
+                    <BookCard
+                      id={book._id}
+                      title={book.title}
+                      image={book.image}
+                      price={book.price}
+                      rating={book.rating}
+                    />
+                  </Col>
+                ))}
           </Row>
         </Col>
       </Row>

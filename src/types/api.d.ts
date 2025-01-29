@@ -1,6 +1,6 @@
 export type ApiResponse<T> = {
     data: T;
-    meta: {
+    meta?: {
         page: number;
         limit: number;
         total: number;

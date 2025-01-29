@@ -1,9 +1,8 @@
 import { Col, Row, theme, Typography } from "antd";
 import { Fragment } from "react/jsx-runtime";
-
-import { useGetAllProductsQuery } from "../../../redux/api/commonApi";
 import BookCard from "../../../components/common/BookCard";
 import BookCardSkeleton from "../../../components/skeleton/BookCardSkeleton";
+import { useGetAllProductsQuery } from "../../books/api";
 
 const { Title, Paragraph } = Typography;
 
@@ -91,6 +90,7 @@ export default function FeaturedCollection() {
                   }}
                 >
                   <BookCard
+                    id={book._id}
                     onAddToCart={handleAddToCart}
                     title={book?.title}
                     price={book?.price}
