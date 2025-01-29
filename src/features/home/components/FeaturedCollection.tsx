@@ -3,6 +3,8 @@ import { Fragment } from "react/jsx-runtime";
 import BookCard from "../../../components/common/BookCard";
 import BookCardSkeleton from "../../../components/skeleton/BookCardSkeleton";
 import { useGetAllProductsQuery } from "../../books/api";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../cart/redux/cartSlice";
 
 const { Title, Paragraph } = Typography;
 
@@ -10,16 +12,17 @@ const { useToken } = theme;
 
 export default function FeaturedCollection() {
   const { token } = useToken();
+  const dispatch = useDispatch();
 
   const { data: booksData, isFetching } = useGetAllProductsQuery(undefined);
 
   // skeleton cards
   const skeletonArray = Array.from({ length: 8 });
 
-  console.log(booksData);
+  // console.log(booksData);
 
-  function handleAddToCart() {
-    console.log("hello");
+  function handleAddToCart(book: { id: string; title: string; price: number }) {
+    dispatch(addToCart(book));
   }
 
   return (
@@ -91,11 +94,17 @@ export default function FeaturedCollection() {
                 >
                   <BookCard
                     id={book._id}
-                    onAddToCart={handleAddToCart}
                     title={book?.title}
                     price={book?.price}
                     image={book?.image}
                     rating={book?.rating}
+                    onAddToCart={() =>
+                      handleAddToCart({
+                        id: book._id,
+                        title: book.title,
+                        price: book.price,
+                      })
+                    }
                   />
                 </Col>
               ))}

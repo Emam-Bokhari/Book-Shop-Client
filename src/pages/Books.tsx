@@ -6,11 +6,15 @@ import BookCard from "../components/common/BookCard";
 import { useMediaQuery } from "react-responsive";
 import { useGetAllProductsQuery } from "../features/books/api";
 import BookCardSkeleton from "../components/skeleton/BookCardSkeleton";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart/redux/cartSlice";
 
 export default function Books() {
   const isSmallScreen = useMediaQuery({ maxWidth: 992 });
   const { data: booksData, isFetching } = useGetAllProductsQuery(undefined);
+  const dispatch = useDispatch();
   const skeletonArray = Array.from({ length: 8 });
+
   return (
     <Fragment>
       <Row
@@ -62,6 +66,9 @@ export default function Books() {
                       image={book.image}
                       price={book.price}
                       rating={book.rating}
+                      onAddToCart={({ id, title, price }) => {
+                        dispatch(addToCart({ id, title, price })); // Ensure all fields are passed
+                      }}
                     />
                   </Col>
                 ))}

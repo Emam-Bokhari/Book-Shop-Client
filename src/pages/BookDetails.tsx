@@ -21,6 +21,8 @@ import {
 } from "@ant-design/icons";
 import { useMediaQuery } from "react-responsive";
 import BookDetailsSkeleton from "../components/skeleton/BookDetailsSkeleton";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cart/redux/cartSlice";
 const { Title, Text, Paragraph } = Typography;
 const { useToken } = theme;
 
@@ -29,9 +31,13 @@ export default function BookDetails() {
   const { id } = useParams();
   const { data: book, isLoading } = useGetProductQuery(id);
   const isSmallScreen = useMediaQuery({ maxWidth: 768 });
-
+  const dispatch = useDispatch();
   if (isLoading) {
     return <BookDetailsSkeleton />;
+  }
+
+  function handleAddToCart(book: { id: string; title: string; price: number }) {
+    dispatch(addToCart(book));
   }
 
   return (
@@ -169,6 +175,7 @@ export default function BookDetails() {
               </Space>
               <Space style={{ marginTop: "20px" }}>
                 <Button
+                  onClick={handleAddToCart}
                   type="primary"
                   iconPosition="end"
                   icon={<ShoppingCartOutlined />}

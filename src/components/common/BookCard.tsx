@@ -1,6 +1,6 @@
 import { Button, Card, Rate, theme, Typography } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // useNavigate for programmatic navigation
 const { Title, Paragraph } = Typography;
 
 const { useToken } = theme;
@@ -11,7 +11,7 @@ interface BookCardProps {
   price: number;
   rating?: number;
   id: string;
-  onAddToCart?: () => void;
+  onAddToCart?: (item: { id: string; title: string; price: number }) => void;
 }
 
 export default function BookCard({
@@ -23,8 +23,21 @@ export default function BookCard({
   id,
 }: BookCardProps) {
   const { token } = useToken();
+  const navigate = useNavigate();
+
+  // Function to handle card click navigation
+  const handleCardClick = () => {
+    navigate(`/books/${id}`);
+  };
+
+  // Function to handle add to cart button click
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevents the navigation when the button is clicked
+    onAddToCart?.({ id, title, price });
+  };
+
   return (
-    <Link to={`/books/${id}`} style={{ textDecoration: "none" }}>
+    <div onClick={handleCardClick} style={{ cursor: "pointer" }}>
       <Card
         style={{
           width: "100%",
@@ -56,7 +69,7 @@ export default function BookCard({
           </Paragraph>
           <Rate disabled defaultValue={rating} />
           <Button
-            onClick={onAddToCart}
+            onClick={handleAddToCart}
             icon={<ShoppingCartOutlined style={{ fontSize: "20px" }} />}
             iconPosition="end"
             type="primary"
@@ -67,6 +80,6 @@ export default function BookCard({
           </Button>
         </div>
       </Card>
-    </Link>
+    </div>
   );
 }

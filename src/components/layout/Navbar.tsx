@@ -1,14 +1,20 @@
-import { Button, Col, Row, Menu, Typography, Drawer, Flex } from "antd";
+import { Button, Col, Row, Menu, Typography, Drawer, Flex, Badge } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import logo from "../../assets/logo/Green-Leaf.png";
 import { useMediaQuery } from "react-responsive";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Link, NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const { Title } = Typography;
 
 export default function Navbar() {
+  const cartItems = useSelector((state: RootState) => state.cart.items); // Get cart items
+  const cartCount = cartItems.length;
+  console.log(cartItems);
+
   const [drawerVisible, setDrawerVisible] = useState(false);
 
   const menuItems = [
@@ -100,12 +106,15 @@ export default function Navbar() {
 
         {/* Buttons for Login and Signup */}
         <Col xs={0} sm={0} md={0} lg={6} style={{ textAlign: "right" }}>
-          <Link to="/shopping-cart">
-            <Button
-              icon={<ShoppingCartOutlined />}
-              type="text"
-              style={{ fontSize: "22px" }}
-            />
+          <Link to="/shopping-cart" style={{ position: "relative" }}>
+            {/* Shopping Cart Icon with Badge in Bottom Right Corner */}
+            <Badge count={cartCount} overflowCount={99}>
+              <Button
+                icon={<ShoppingCartOutlined />}
+                type="text"
+                style={{ fontSize: "22px" }}
+              />
+            </Badge>
           </Link>
           <Button type="text" style={{ marginRight: "10px" }}>
             <NavLink to="/signin">Signin</NavLink>
