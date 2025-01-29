@@ -59,7 +59,7 @@ export default function FeaturedCollection() {
         </Paragraph>
         <Row
           gutter={[16, 16]}
-          justify="center"
+          justify="start"
           style={{ width: "100%", marginTop: "20px" }}
         >
           {isFetching
