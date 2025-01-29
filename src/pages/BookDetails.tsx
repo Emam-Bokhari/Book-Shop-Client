@@ -20,14 +20,20 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { useMediaQuery } from "react-responsive";
+import BookDetailsSkeleton from "../components/skeleton/BookDetailsSkeleton";
 const { Title, Text, Paragraph } = Typography;
 const { useToken } = theme;
 
 export default function BookDetails() {
   const { token } = useToken();
   const { id } = useParams();
-  const { data: book } = useGetProductQuery(id);
+  const { data: book, isLoading } = useGetProductQuery(id);
   const isSmallScreen = useMediaQuery({ maxWidth: 768 });
+
+  if (isLoading) {
+    return <BookDetailsSkeleton />;
+  }
+
   return (
     <Fragment>
       <Card
