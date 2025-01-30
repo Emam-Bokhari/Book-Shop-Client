@@ -22,11 +22,11 @@ export default function Signin() {
       // console.log(response);
       const user = verifyToken(response.data.token);
       dispatch(setUser({ user: user, token: response.data }));
-      toast.success("Logged in successful", { id: toastId, duration: 2000 });
+      toast.success("Login successful", { id: toastId, duration: 2000 });
       console.log("User Signed In:", user);
     } catch (err) {
       console.log(err);
-      toast.error(err.message || "Login failed!", {
+      toast.error(err.message || "Login attempt failed. Please try again.", {
         id: toastId,
         duration: 2000,
       });

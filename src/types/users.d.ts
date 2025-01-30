@@ -4,3 +4,9 @@ export type TSignUp = {
     password: string;
 }
 
+export type TUser = {
+    email: string;
+    password: string;
+    iat: number;
+    exp: number;
+}
