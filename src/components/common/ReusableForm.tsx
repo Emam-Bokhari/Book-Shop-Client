@@ -23,7 +23,9 @@ export default function ReusableForm({
   const methods = useForm();
   return (
     <FormProvider {...methods}>
-      <Form onFinish={methods.handleSubmit(submit)}>{children}</Form>
+      <Form layout="vertical" onFinish={methods.handleSubmit(submit)}>
+        {children}
+      </Form>
     </FormProvider>
   );
 }

@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
 import { BrowserRouter as Router } from "react-router-dom";
 import App from "./App.tsx";
+import { Toaster } from "sonner";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -35,6 +36,7 @@ createRoot(document.getElementById("root")!).render(
         <Router>
           <App />
         </Router>
+        <Toaster richColors={true} expand={true} position={"top-right"} />
       </ConfigProvider>
     </Provider>
   </StrictMode>

@@ -1,12 +1,35 @@
-import { Form, Input, Button, Card, Typography, Checkbox } from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Form, Button, Card, Typography, Checkbox } from "antd";
+import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import ReusableForm from "../components/common/ReusableForm";
+import ReusableInput from "../components/common/ReusableInput";
+import { useSignupMutation } from "../features/auth/api";
+import { toast } from "sonner";
 
 const { Title } = Typography;
 
 export default function Signup() {
-  const handleSubmit = (values) => {
-    console.log("User Signed Up:", values);
+  const navigate = useNavigate();
+  const [signup] = useSignupMutation();
+
+  const onSubmit = async (data) => {
+    const toastId = toast.loading("Creating your account...");
+    try {
+      // console.log("User Signed Up:", data);
+      const response = await signup(data).unwrap();
+      toast.success("Your account has been created successfully!", {
+        id: toastId,
+        duration: 2000,
+      });
+      navigate("/");
+      console.log(response);
+    } catch (err) {
+      // console.log(err);
+      toast.error(err.message || "Registration failed. Please try again.", {
+        id: toastId,
+        duration: 2000,
+      });
+    }
   };
 
   return (
@@ -29,19 +52,31 @@ export default function Signup() {
         <Title level={4} style={{ textAlign: "center" }}>
           Sign Up
         </Title>
-        <Form layout="vertical" onFinish={handleSubmit}>
-          <Form.Item
+        <ReusableForm onSubmit={onSubmit}>
+          <ReusableInput
+            type="text"
+            name="name"
+            placeholder="Enter Your Name"
+            rules={[{ required: true, message: "Please enter your name" }]}
+            icon={<UserOutlined />}
+          />
+
+          <ReusableInput
+            type="text"
             name="email"
-            rules={[{ required: true, message: "Please enter your email!" }]}
-          >
-            <Input prefix={<UserOutlined />} placeholder="Email" />
-          </Form.Item>
-          <Form.Item
+            placeholder="Enter Your Email"
+            rules={[{ required: true, message: "Please enter your email" }]}
+            icon={<MailOutlined />}
+          />
+
+          <ReusableInput
+            type="text"
             name="password"
+            placeholder="Password"
             rules={[{ required: true, message: "Please enter your password!" }]}
-          >
-            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-          </Form.Item>
+            icon={<LockOutlined />}
+          />
+
           <Form.Item style={{ display: "flex", alignItems: "center" }}>
             <Checkbox name="termOfService" />
             <span style={{ marginLeft: 8 }}>
@@ -62,7 +97,7 @@ export default function Signup() {
           <Button type="primary" htmlType="submit" block>
             Sign Up
           </Button>
-        </Form>
+        </ReusableForm>
       </Card>
     </div>
   );
