@@ -1,6 +1,5 @@
 import { Button, Card, Rate, theme, Typography } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom"; // useNavigate for programmatic navigation
+import { Link } from "react-router-dom";
 const { Title, Paragraph } = Typography;
 
 const { useToken } = theme;
@@ -11,12 +10,6 @@ interface BookCardProps {
   price: number;
   rating?: number;
   id: string;
-  onAddToCart?: (item: {
-    id: string;
-    title: string;
-    image: string;
-    price: number;
-  }) => void;
 }
 
 export default function BookCard({
@@ -24,25 +17,12 @@ export default function BookCard({
   image,
   price,
   rating = 4,
-  onAddToCart,
   id,
 }: BookCardProps) {
   const { token } = useToken();
-  const navigate = useNavigate();
-
-  // Function to handle card click navigation
-  const handleCardClick = () => {
-    navigate(`/books/${id}`);
-  };
-
-  // Function to handle add to cart button click
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onAddToCart?.({ id, image, title, price });
-  };
 
   return (
-    <div onClick={handleCardClick} style={{ cursor: "pointer" }}>
+    <Link to={`/books/${id}`} style={{ cursor: "pointer" }}>
       <Card
         style={{
           width: "100%",
@@ -70,21 +50,19 @@ export default function BookCard({
             {title}
           </Title>
           <Paragraph style={{ color: "#62AB00", fontWeight: "bold" }}>
-            BDT &nbsp;{price}
+            $ &nbsp;{price}
           </Paragraph>
           <Rate disabled defaultValue={rating} />
           <Button
-            onClick={handleAddToCart}
-            icon={<ShoppingCartOutlined style={{ fontSize: "20px" }} />}
             iconPosition="end"
             type="primary"
             block
             style={{ marginTop: "10px" }}
           >
-            Add to cart
+            View Details
           </Button>
         </div>
       </Card>
-    </div>
+    </Link>
   );
 }

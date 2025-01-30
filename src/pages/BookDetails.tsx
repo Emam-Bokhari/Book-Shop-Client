@@ -31,13 +31,14 @@ export default function BookDetails() {
     return <BookDetailsSkeleton />;
   }
 
-  function handleAddToCart(book: {
-    id: string;
-    image: string;
-    title: string;
-    price: number;
-  }) {
-    dispatch(addToCart(book));
+  function handleAddToCart() {
+    const cartItem = {
+      id: book?.data._id,
+      image: book?.data.image,
+      title: book?.data.title,
+      price: book?.data.price,
+    };
+    dispatch(addToCart(cartItem));
   }
 
   return (
