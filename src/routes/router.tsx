@@ -8,6 +8,7 @@ import Signup from "../pages/Signup";
 import BookDetails from "../pages/BookDetails";
 import ShoppingCart from "../pages/ShoppingCart";
 import NavOnlyLayout from "../components/layout/NavOnlyLayout";
+import NotFoundPage from "../pages/NotFoundPage";
 
 export const publicRoutes = [
   { path: "/", element: <Home />, layout: DefaultLayout },
@@ -18,4 +19,5 @@ export const publicRoutes = [
   { path: "/contact-us", element: <ContactUs />, layout: DefaultLayout },
   { path: "/signin", element: <Signin />, layout: NavOnlyLayout },
   { path: "/signup", element: <Signup />, layout: NavOnlyLayout },
+  { path: "*", element: <NotFoundPage />, layout: NavOnlyLayout },
 ];
