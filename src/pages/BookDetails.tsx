@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Fragment } from "react/jsx-runtime";
 import { useGetProductQuery } from "../features/books/api";
 import moment from "moment-timezone";
@@ -16,22 +16,32 @@ import {
 import { ShoppingCartOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { useMediaQuery } from "react-responsive";
 import BookDetailsSkeleton from "../components/skeleton/BookDetailsSkeleton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cart/redux/cartSlice";
+import { RootState } from "../redux/store";
 const { Title, Text, Paragraph } = Typography;
 const { useToken } = theme;
 
 export default function BookDetails() {
   const { token } = useToken();
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data: book, isLoading } = useGetProductQuery(id);
   const isSmallScreen = useMediaQuery({ maxWidth: 768 });
   const dispatch = useDispatch();
+
+  // check if user is authenticate
+  const isAuthenticated = useSelector((state: RootState) => !!state.auth.token);
+
   if (isLoading) {
     return <BookDetailsSkeleton />;
   }
 
   function handleAddToCart() {
+    if (!isAuthenticated) {
+      navigate("/signin");
+      return;
+    }
     const cartItem = {
       id: book?.data._id,
       image: book?.data.image,

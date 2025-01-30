@@ -1,6 +1,6 @@
 import { Form, Button, Card, Typography, Checkbox, Row, Col } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ReusableForm from "../components/common/ReusableForm";
 import ReusableInput from "../components/common/ReusableInput";
 import { useLoginMutation } from "../features/auth/api";
@@ -13,6 +13,8 @@ const { Title } = Typography;
 
 export default function Signin() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [login] = useLoginMutation();
 
   const onSubmit = async (data) => {
@@ -23,7 +25,10 @@ export default function Signin() {
       const user = verifyToken(response.data.token);
       dispatch(setUser({ user: user, token: response.data }));
       toast.success("Login successful", { id: toastId, duration: 2000 });
-      console.log("User Signed In:", user);
+      // console.log("User Signed In:", user);
+      const redirectPath = location.state?.from.pathname || "/";
+      console.log(redirectPath);
+      navigate(redirectPath, { replace: true });
     } catch (err) {
       console.log(err);
       toast.error(err.message || "Login attempt failed. Please try again.", {

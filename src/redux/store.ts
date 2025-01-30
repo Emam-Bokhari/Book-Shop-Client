@@ -4,7 +4,7 @@ import cartReducer from "../features/cart/redux/cartSlice"
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import authReducer from "../features/auth/redux/authSlice"
-import cartReducer from "../features/cart/redux/cartSlice"
+
 
 // persist configure for auth
 const persistConfig = {
