@@ -5,6 +5,7 @@ import ReusableForm from "../components/common/ReusableForm";
 import ReusableInput from "../components/common/ReusableInput";
 import { useSignupMutation } from "../features/auth/api";
 import { toast } from "sonner";
+import { TSignUp } from "../types/users";
 
 const { Title } = Typography;
 
@@ -12,7 +13,7 @@ export default function Signup() {
   const navigate = useNavigate();
   const [signup] = useSignupMutation();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: TSignUp) => {
     const toastId = toast.loading("Creating your account...");
     try {
       // console.log("User Signed Up:", data);
