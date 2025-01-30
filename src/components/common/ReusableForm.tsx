@@ -7,7 +7,7 @@ import {
   useForm,
 } from "react-hook-form";
 
-type ReusableFormProps = {
+type TReusableFormProps = {
   onSubmit: SubmitHandler<FieldValues>;
   children: ReactNode;
 };
@@ -15,7 +15,7 @@ type ReusableFormProps = {
 export default function ReusableForm({
   children,
   onSubmit,
-}: ReusableFormProps) {
+}: TReusableFormProps) {
   const submit: SubmitHandler<FieldValues> = (data) => {
     onSubmit(data);
     methods.reset();
