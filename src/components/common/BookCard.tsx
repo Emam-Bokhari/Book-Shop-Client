@@ -11,7 +11,12 @@ interface BookCardProps {
   price: number;
   rating?: number;
   id: string;
-  onAddToCart?: (item: { id: string; title: string; price: number }) => void;
+  onAddToCart?: (item: {
+    id: string;
+    title: string;
+    image: string;
+    price: number;
+  }) => void;
 }
 
 export default function BookCard({
@@ -32,8 +37,8 @@ export default function BookCard({
 
   // Function to handle add to cart button click
   const handleAddToCart = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevents the navigation when the button is clicked
-    onAddToCart?.({ id, title, price });
+    e.stopPropagation();
+    onAddToCart?.({ id, image, title, price });
   };
 
   return (

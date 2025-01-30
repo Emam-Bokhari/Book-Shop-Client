@@ -13,12 +13,7 @@ import {
   theme,
   Typography,
 } from "antd";
-import {
-  ShoppingCartOutlined,
-  ShareAltOutlined,
-  MinusOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { ShoppingCartOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { useMediaQuery } from "react-responsive";
 import BookDetailsSkeleton from "../components/skeleton/BookDetailsSkeleton";
 import { useDispatch } from "react-redux";
@@ -36,7 +31,12 @@ export default function BookDetails() {
     return <BookDetailsSkeleton />;
   }
 
-  function handleAddToCart(book: { id: string; title: string; price: number }) {
+  function handleAddToCart(book: {
+    id: string;
+    image: string;
+    title: string;
+    price: number;
+  }) {
     dispatch(addToCart(book));
   }
 
@@ -168,11 +168,6 @@ export default function BookDetails() {
                 value={book?.data.rating}
                 style={{ fontSize: "18px" }}
               />
-              <Space style={{ marginTop: "20px" }}>
-                <Button icon={<MinusOutlined />} />
-                <Text style={{ fontSize: "16px", fontWeight: "bold" }}>15</Text>
-                <Button icon={<PlusOutlined />} />
-              </Space>
               <Space style={{ marginTop: "20px" }}>
                 <Button
                   onClick={handleAddToCart}

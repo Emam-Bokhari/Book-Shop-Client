@@ -66,8 +66,8 @@ export default function Books() {
                       image={book.image}
                       price={book.price}
                       rating={book.rating}
-                      onAddToCart={({ id, title, price }) => {
-                        dispatch(addToCart({ id, title, price })); // Ensure all fields are passed
+                      onAddToCart={({ id, title, image, price }) => {
+                        dispatch(addToCart({ id, title, image, price })); // Ensure all fields are passed
                       }}
                     />
                   </Col>

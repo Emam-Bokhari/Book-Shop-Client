@@ -1,26 +1,55 @@
 import { Table, Button, Card, Row, Col, Input } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { removeFromCart } from "../features/cart/redux/cartSlice";
 
 export default function ShoppingCart() {
+  const shoppingCartData = useSelector((state: RootState) => state.cart.items);
+  const dispatch = useDispatch();
+
+  const tableData = shoppingCartData?.map(
+    ({ id, title, image, price, quantity }) => ({
+      key: id,
+      title,
+      image,
+      price,
+      quantity,
+      total: price * quantity,
+    })
+  );
+
+  //  Calculate total products (sum of quantities)
+  const totalProducts = shoppingCartData.reduce(
+    (acc, item) => acc + item.quantity,
+    0
+  );
+
+  // calculate subtotal (sum of all total prices)
+  const subtotal = shoppingCartData.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
+
   const columns = [
     {
       title: "Image",
       dataIndex: "image",
       key: "image",
-      render: (text) => (
-        <img src={text} alt="Product" style={{ width: 50, height: 50 }} />
+      render: (imageLink) => (
+        <img src={imageLink} alt="Product" style={{ width: 50, height: 50 }} />
       ),
     },
     {
       title: "Product",
-      dataIndex: "product",
-      key: "product",
+      dataIndex: "title",
+      key: "title",
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      render: (text) => `$${text.toFixed(2)}`,
+      render: (item) => `$${item.toFixed(2)}`,
     },
     {
       title: "Quantity",
@@ -36,32 +65,14 @@ export default function ShoppingCart() {
     {
       title: "Action",
       key: "action",
-      render: () => (
+      render: (_, record) => (
         <Button
           type="danger"
           icon={<DeleteOutlined />}
           style={{ color: "red" }}
+          onClick={() => dispatch(removeFromCart(record.key))}
         />
       ),
-    },
-  ];
-
-  const data = [
-    {
-      key: "1",
-      image: "https://m.media-amazon.com/images/I/81IM6vEPvLL._SY466_.jpg",
-      product: "Rinosin Glasses",
-      price: 395.0,
-      quantity: 1,
-      total: 395.0,
-    },
-    {
-      key: "2",
-      image: "https://m.media-amazon.com/images/I/81IM6vEPvLL._SY466_.jpg",
-      product: "Rinosin Glasses",
-      price: 395.0,
-      quantity: 1,
-      total: 395.0,
     },
   ];
 
@@ -72,7 +83,7 @@ export default function ShoppingCart() {
         <Col xs={24} lg={16}>
           <Table
             columns={columns}
-            dataSource={data}
+            dataSource={tableData}
             pagination={false}
             scroll={{ x: "max-content" }}
           />
@@ -84,14 +95,13 @@ export default function ShoppingCart() {
             title="Cart Summary"
             style={{ textAlign: "center", marginBottom: "20px" }}
           >
-            <p style={{ fontWeight: "bold" }}>
-              Total Products: <span style={{ color: "red" }}>07</span>
+            <p style={{ fontWeight: "500" }}>
+              Total Products:{" "}
+              <span style={{ color: "#FF4F4F" }}>{totalProducts}</span>
             </p>
-            <p style={{ marginTop: "10px", fontWeight: "bold" }}>
+            <p style={{ marginTop: "10px", fontWeight: "500" }}>
               Subtotal:{" "}
-              <span style={{ color: "red" }}>
-                ${data.reduce((acc, item) => acc + item.total, 0).toFixed(2)}
-              </span>
+              <span style={{ color: "#FF4F4F" }}>${subtotal.toFixed(2)}</span>
             </p>
           </Card>
 

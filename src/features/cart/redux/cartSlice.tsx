@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CartItem {
   id: string;
+  image: string;
   title: string;
   price: number;
   quantity: number;
@@ -21,21 +22,27 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (
       state,
-      action: PayloadAction<{ id: string; title: string; price: number }>
+      action: PayloadAction<{
+        id: string;
+        image: string;
+        title: string;
+        price: number;
+      }>
     ) => {
-      // Directly add the item to the cart without checking if it exists
-      const newItem = {
-        ...action.payload,
-        quantity: 1,
-      };
-      state.items.push(newItem);
+      const existingItem = state.items.find(
+        (item) => item.id === action.payload.id
+      );
+
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        state.items.push({ ...action.payload, quantity: 1 });
+      }
     },
     removeFromCart: (state, action: PayloadAction<string>) => {
-      // Remove the item from the cart based on its id
       state.items = state.items.filter((item) => item.id !== action.payload);
     },
     clearCart: (state) => {
-      // Clear the entire cart by resetting items to an empty array
       state.items = [];
     },
   },

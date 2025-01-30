@@ -13,7 +13,7 @@ const { Title } = Typography;
 export default function Navbar() {
   const cartItems = useSelector((state: RootState) => state.cart.items); // Get cart items
   const cartCount = cartItems.length;
-  console.log(cartItems);
+  // console.log(cartItems);
 
   const [drawerVisible, setDrawerVisible] = useState(false);
 
