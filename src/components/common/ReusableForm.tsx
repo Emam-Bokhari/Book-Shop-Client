@@ -7,20 +7,21 @@ import {
   useForm,
 } from "react-hook-form";
 
-type TReusableFormProps = {
-  onSubmit: SubmitHandler<FieldValues>;
+type TReusableFormProps<T extends FieldValues> = {
+  onSubmit: SubmitHandler<T>;
   children: ReactNode;
 };
 
-export default function ReusableForm({
+export default function ReusableForm<T extends FieldValues>({
   children,
   onSubmit,
-}: TReusableFormProps) {
-  const submit: SubmitHandler<FieldValues> = (data) => {
+}: TReusableFormProps<T>) {
+  const methods = useForm<T>(); // Initialize before using it
+  const submit: SubmitHandler<T> = (data) => {
     onSubmit(data);
-    methods.reset();
+    methods.reset(); // Reset after successful submission
   };
-  const methods = useForm();
+
   return (
     <FormProvider {...methods}>
       <Form layout="vertical" onFinish={methods.handleSubmit(submit)}>

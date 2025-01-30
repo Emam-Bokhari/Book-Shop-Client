@@ -1,21 +1,36 @@
-import {
-  Form,
-  Input,
-  Button,
-  Card,
-  Typography,
-  Checkbox,
-  Row,
-  Col,
-} from "antd";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Form, Button, Card, Typography, Checkbox, Row, Col } from "antd";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import ReusableForm from "../components/common/ReusableForm";
+import ReusableInput from "../components/common/ReusableInput";
+import { useLoginMutation } from "../features/auth/api";
+import { verifyToken } from "../utils/verifyToken";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/auth/redux/authSlice";
+import { toast } from "sonner";
 
 const { Title } = Typography;
 
 export default function Signin() {
-  const handleSubmit = (values) => {
-    console.log("User Signed In:", values);
+  const dispatch = useDispatch();
+  const [login] = useLoginMutation();
+
+  const onSubmit = async (data) => {
+    const toastId = toast.loading("Logging in...");
+    try {
+      const response = await login(data).unwrap();
+      // console.log(response);
+      const user = verifyToken(response.data.token);
+      dispatch(setUser({ user: user, token: response.data }));
+      toast.success("Logged in successful", { id: toastId, duration: 2000 });
+      console.log("User Signed In:", user);
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message || "Login failed!", {
+        id: toastId,
+        duration: 2000,
+      });
+    }
   };
 
   return (
@@ -38,19 +53,22 @@ export default function Signin() {
         <Title level={4} style={{ textAlign: "center" }}>
           Sign In
         </Title>
-        <Form layout="vertical" onFinish={handleSubmit}>
-          <Form.Item
+        <ReusableForm onSubmit={onSubmit}>
+          <ReusableInput
+            type="text"
             name="email"
-            rules={[{ required: true, message: "Please enter your email!" }]}
-          >
-            <Input prefix={<UserOutlined />} placeholder="Email" />
-          </Form.Item>
-          <Form.Item
+            placeholder="Enter Your Email"
+            rules={[{ required: true, message: "Please enter your email" }]}
+            icon={<MailOutlined />}
+          />
+
+          <ReusableInput
+            type="text"
             name="password"
+            placeholder="Password"
             rules={[{ required: true, message: "Please enter your password!" }]}
-          >
-            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-          </Form.Item>
+            icon={<LockOutlined />}
+          />
           <Form.Item>
             <Checkbox name="rememberMe">Remember Me</Checkbox>
           </Form.Item>
@@ -84,7 +102,7 @@ export default function Signin() {
           <Button type="primary" htmlType="submit" block>
             Sign In
           </Button>
-        </Form>
+        </ReusableForm>
       </Card>
     </div>
   );
