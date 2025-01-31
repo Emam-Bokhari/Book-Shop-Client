@@ -73,7 +73,9 @@ export default function Products() {
             <Link to={`/products/${item.key}`}>
               <Button>Details</Button>
             </Link>
-            <Button>Update</Button>
+            <Link to={`/update/products/${item.key}`}>
+              <Button>Update</Button>
+            </Link>
             <Button>Delete</Button>
           </Space>
         );

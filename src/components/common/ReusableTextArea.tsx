@@ -7,6 +7,7 @@ type TReusableTextAreaProps = {
   placeholder?: string;
   rules?: Array<{ required: boolean; message: string }>;
   rows?: number;
+  defaultValue?: string;
 };
 
 export default function ReusableTextArea({
@@ -15,6 +16,7 @@ export default function ReusableTextArea({
   placeholder,
   rules,
   rows = 4,
+  defaultValue,
 }: TReusableTextAreaProps) {
   const { control } = useFormContext();
   return (
@@ -29,6 +31,7 @@ export default function ReusableTextArea({
             size="middle"
             placeholder={placeholder}
             rows={rows}
+            defaultValue={defaultValue}
           />
         </Form.Item>
       )}

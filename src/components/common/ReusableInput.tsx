@@ -8,6 +8,7 @@ type TReusableInputProps = {
   label?: string;
   icon?: ReactNode;
   placeholder?: string;
+  defaultValue?: string | number;
   rules?: Array<{ required: boolean; message: string }>;
 };
 
@@ -17,6 +18,7 @@ export default function ReusableInput({
   label,
   icon,
   placeholder,
+  defaultValue,
   rules,
 }: TReusableInputProps) {
   const { control } = useFormContext();
@@ -33,6 +35,7 @@ export default function ReusableInput({
             prefix={icon}
             size="middle"
             placeholder={placeholder}
+            defaultValue={defaultValue}
           />
         </Form.Item>
       )}

@@ -19,6 +19,7 @@ import Users from "../pages/admin/Users";
 import CreateProduct from "../pages/admin/productManagement/CreateProduct";
 import Products from "../pages/admin/productManagement/Products";
 import ProductDetails from "../pages/admin/productManagement/ProductDetails";
+import UpdateProduct from "../pages/admin/productManagement/UpdateProduct";
 
 export const publicRoutes = [
   { path: "/", element: <Home />, layout: DefaultLayout },
@@ -101,6 +102,15 @@ export const publicRoutes = [
     element: (
       <PrivateRoute role="admin">
         <ProductDetails />
+      </PrivateRoute>
+    ),
+    layout: DashboardLayout,
+  },
+  {
+    path: "update/products/:id",
+    element: (
+      <PrivateRoute role="admin">
+        <UpdateProduct />
       </PrivateRoute>
     ),
     layout: DashboardLayout,

@@ -1,13 +1,18 @@
 import { DatePicker, Form } from "antd";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { Controller, useFormContext } from "react-hook-form";
 
 type TDatePickerProps = {
   name: string;
   label?: string;
+  defaultValue?: string;
 };
 
-export default function ReusableDatePicker({ name, label }: TDatePickerProps) {
+export default function ReusableDatePicker({
+  name,
+  label,
+  defaultValue,
+}: TDatePickerProps) {
   const {
     control,
     formState: { errors },
@@ -24,10 +29,11 @@ export default function ReusableDatePicker({ name, label }: TDatePickerProps) {
             id={name}
             size="middle"
             style={{ width: "100%" }}
+            defaultValue={defaultValue ? moment(defaultValue) : null}
             value={field.value ? moment(field.value) : null}
-            onChange={(date) =>
-              field.onChange(date ? date.toISOString() : null)
-            }
+            onChange={(date: Moment | null) => {
+              field.onChange(date ? date.toISOString() : null);
+            }}
           />
         </Form.Item>
       )}
