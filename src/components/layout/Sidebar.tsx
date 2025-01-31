@@ -30,8 +30,8 @@ const menuItems = [
         icon: <UserAddOutlined />,
       },
       {
-        key: "all-users",
-        label: <Link to="/all-users">All Users</Link>,
+        key: "users",
+        label: <Link to="/users">All Users</Link>,
         icon: <TeamOutlined />,
       },
     ],

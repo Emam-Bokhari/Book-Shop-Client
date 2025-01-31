@@ -14,6 +14,8 @@ import OrderHistory from "../pages/OrderHistory";
 import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
 import DashboardLayout from "../components/layout/DashboardLayout";
+import CreateUser from "../pages/admin/CreateUser";
+import Users from "../pages/admin/Users";
 
 export const publicRoutes = [
   { path: "/", element: <Home />, layout: DefaultLayout },
@@ -38,6 +40,15 @@ export const publicRoutes = [
     layout: DefaultLayout,
   },
   {
+    path: "/profile",
+    element: (
+      <PrivateRoute>
+        <Profile />
+      </PrivateRoute>
+    ),
+    layout: DefaultLayout,
+  },
+  {
     path: "/dashboard",
     element: (
       <PrivateRoute role="admin">
@@ -47,13 +58,22 @@ export const publicRoutes = [
     layout: DashboardLayout,
   },
   {
-    path: "/profile",
+    path: "/create-user",
     element: (
-      <PrivateRoute>
-        <Profile />
+      <PrivateRoute role="admin">
+        <CreateUser />
       </PrivateRoute>
     ),
-    layout: DefaultLayout,
+    layout: DashboardLayout,
+  },
+  {
+    path: "/users",
+    element: (
+      <PrivateRoute role="admin">
+        <Users />
+      </PrivateRoute>
+    ),
+    layout: DashboardLayout,
   },
   { path: "/about-us", element: <AboutUs />, layout: DefaultLayout },
   { path: "/contact-us", element: <ContactUs />, layout: DefaultLayout },

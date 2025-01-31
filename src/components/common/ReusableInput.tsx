@@ -31,6 +31,7 @@ export default function ReusableInput({
             type={type}
             id={name}
             prefix={icon}
+            size="middle"
             placeholder={placeholder}
           />
         </Form.Item>
