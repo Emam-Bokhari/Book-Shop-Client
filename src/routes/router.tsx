@@ -11,6 +11,7 @@ import NavOnlyLayout from "../components/layout/NavOnlyLayout";
 import NotFoundPage from "../pages/NotFoundPage";
 import PrivateRoute from "../components/common/PrivateRoute";
 import OrderHistory from "../pages/OrderHistory";
+import Profile from "../pages/Profile";
 
 export const publicRoutes = [
   { path: "/", element: <Home />, layout: DefaultLayout },
@@ -30,6 +31,15 @@ export const publicRoutes = [
     element: (
       <PrivateRoute>
         <OrderHistory />
+      </PrivateRoute>
+    ),
+    layout: DefaultLayout,
+  },
+  {
+    path: "/profile",
+    element: (
+      <PrivateRoute>
+        <Profile />
       </PrivateRoute>
     ),
     layout: DefaultLayout,
