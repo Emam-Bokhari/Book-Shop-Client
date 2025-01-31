@@ -1,7 +1,8 @@
 import { Fragment } from "react";
-import { Col, Row, Table, Tag, Select } from "antd";
+import { Col, Row, Table, Tag, Select, Button } from "antd";
 import moment from "moment-timezone";
 import {
+  useDeleteUserMutation,
   useGetAllUsersQuery,
   useUpdateUserRoleMutation,
   useUpdateUserStatusMutation,
@@ -16,6 +17,7 @@ export default function Users() {
   } = useGetAllUsersQuery(undefined);
   const [updateUserRole] = useUpdateUserRoleMutation();
   const [updateUserStatus] = useUpdateUserStatusMutation();
+  const [deleteUser] = useDeleteUserMutation();
 
   const tableData = usersData?.data.map(
     ({ name, role, email, createdAt, status, _id }) => ({
@@ -27,17 +29,6 @@ export default function Users() {
       createdAt: moment.tz(createdAt, "Asia/Dhaka").format("YYYY MMM DD"),
     })
   );
-
-  //   const getStatusTag = (status: string) => {
-  //     switch (status) {
-  //       case "active":
-  //         return <Tag color="green">Active</Tag>;
-  //       case "banned":
-  //         return <Tag color="red">Banned</Tag>;
-  //       default:
-  //         return <Tag color="default">Unknown</Tag>;
-  //     }
-  //   };
 
   // Function to handle role update
   const handleRoleUpdate = (value: string, userId: string) => {
@@ -80,6 +71,23 @@ export default function Users() {
         toast.error(
           err?.message ||
             "There was an issue while updating the status. Please try again.",
+          { id: toastId }
+        );
+      });
+  };
+
+  // Function to handle user deletion
+  const handleDeleteUser = (userId: string) => {
+    const toastId = toast.loading("Deleting user...");
+    deleteUser(userId)
+      .unwrap()
+      .then(() => {
+        toast.success("User has been successfully deleted.", { id: toastId });
+        refetch();
+      })
+      .catch((err) => {
+        toast.error(
+          err?.message || "There was an issue while deleting the user.",
           { id: toastId }
         );
       });
@@ -130,6 +138,15 @@ export default function Users() {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_, record) => (
+        <Button danger onClick={() => handleDeleteUser(record.key)}>
+          Delete
+        </Button>
+      ),
     },
   ];
 
