@@ -70,7 +70,7 @@ export default function CreateUser() {
               icon={<LockOutlined />}
             />
             <Button type="primary" htmlType="submit" block>
-              Sign Up
+              Register
             </Button>
           </ReusableForm>
         </Col>
