@@ -1,20 +1,11 @@
-import { useState } from "react";
-import {
-  Input,
-  Button,
-  Select,
-  Form,
-  Upload,
-  message,
-  Row,
-  Col,
-  theme,
-} from "antd";
+import { Input, Button, Select, Form, Upload, Row, Col, theme } from "antd";
 import {
   UserOutlined,
   LockOutlined,
   FileImageOutlined,
 } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../features/auth/redux/authSlice"; // Import the selector
 
 const { Option } = Select;
 const { useToken } = theme;
@@ -22,16 +13,9 @@ const { useToken } = theme;
 export default function Profile() {
   const [form] = Form.useForm();
   const { token } = useToken();
-  const [profileImage, setProfileImage] = useState(null);
 
-  const handleImageChange = (info) => {
-    if (info.file.status === "done") {
-      message.success("Profile image uploaded successfully");
-      setProfileImage(info.file.response.url);
-    } else if (info.file.status === "error") {
-      message.error("Profile image upload failed");
-    }
-  };
+  const user = useSelector(selectCurrentUser);
+  console.log(user);
 
   return (
     <div
@@ -56,7 +40,7 @@ export default function Profile() {
 
       {/* Layout for Profile Settings - Split into two parts */}
       <Row gutter={32}>
-        {/* Left side: Full Name, Email, Change Button */}
+        {/* Left side: Role, Email, Change Button */}
         <Col xs={24} sm={12} lg={12}>
           <div
             style={{
@@ -71,41 +55,31 @@ export default function Profile() {
               layout="vertical"
               style={{ maxWidth: "100%" }}
               initialValues={{
-                name: "",
-                email: "",
+                role: user?.role,
+                email: user?.email,
               }}
             >
-              <Form.Item
-                name="name"
-                label="Full Name"
-                rules={[
-                  { required: true, message: "Please enter your full name!" },
-                ]}
-              >
+              <Form.Item name="role" label="Role">
                 <Input
+                  size="large"
+                  disabled
                   prefix={<UserOutlined />}
-                  placeholder="Enter your full name"
                   style={{ width: "100%", marginBottom: "10px" }}
                 />
               </Form.Item>
 
-              <Form.Item
-                name="email"
-                label="Email"
-                rules={[
-                  { required: true, message: "Please enter your email!" },
-                ]}
-              >
+              <Form.Item name="email" label="Email">
                 <Input
+                  size="large"
+                  disabled
                   prefix={<UserOutlined />}
-                  placeholder="Enter your email"
                   style={{ width: "100%", marginBottom: "10px" }}
                 />
               </Form.Item>
 
-              <Form.Item>
+              {/* <Form.Item>
                 <Button type="primary">Change Information</Button>
-              </Form.Item>
+              </Form.Item> */}
             </Form>
           </div>
         </Col>
@@ -134,32 +108,20 @@ export default function Profile() {
                 action="/upload"
                 listType="picture-card"
                 showUploadList={false}
-                onChange={handleImageChange}
               >
-                {profileImage ? (
-                  <img
-                    src={profileImage}
-                    alt="Profile"
-                    style={{
-                      width: "120px",
-                      height: "120px",
-                      borderRadius: "50%",
-                    }}
-                  />
-                ) : (
-                  <Button
-                    icon={<FileImageOutlined />}
-                    style={{ backgroundColor: "#62AB00", color: "#fff" }}
-                  >
-                    Upload Profile Picture
-                  </Button>
-                )}
+                <Button
+                  icon={<FileImageOutlined />}
+                  style={{ backgroundColor: "#62AB00", color: "#fff" }}
+                >
+                  Upload Profile Picture
+                </Button>
               </Upload>
             </div>
 
             {/* Password Fields */}
             <Form.Item label="Current Password">
               <Input.Password
+                size="large"
                 prefix={<LockOutlined />}
                 placeholder="Current password"
                 disabled
@@ -172,6 +134,7 @@ export default function Profile() {
 
             <Form.Item label="New Password">
               <Input.Password
+                size="large"
                 prefix={<LockOutlined />}
                 placeholder="New password"
                 disabled
@@ -184,6 +147,7 @@ export default function Profile() {
 
             <Form.Item label="Confirm New Password">
               <Input.Password
+                size="large"
                 prefix={<LockOutlined />}
                 placeholder="Confirm new password"
                 disabled
@@ -196,7 +160,14 @@ export default function Profile() {
 
             {/* Preferences Section */}
             <Form.Item label="Language">
-              <Select defaultValue="English" size="large" disabled>
+              <Select
+                defaultValue="English"
+                size="large"
+                disabled
+                style={{
+                  width: "100%",
+                }}
+              >
                 <Option value="en">English</Option>
                 <Option value="es">Spanish</Option>
                 <Option value="fr">French</Option>
@@ -204,7 +175,14 @@ export default function Profile() {
             </Form.Item>
 
             <Form.Item label="Theme">
-              <Select defaultValue="light" size="large" disabled>
+              <Select
+                defaultValue="light"
+                size="large"
+                disabled
+                style={{
+                  width: "100%",
+                }}
+              >
                 <Option value="light">Light</Option>
                 <Option value="dark">Dark</Option>
               </Select>
