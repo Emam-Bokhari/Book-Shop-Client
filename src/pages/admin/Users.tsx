@@ -4,6 +4,7 @@ import moment from "moment-timezone";
 import {
   useGetAllUsersQuery,
   useUpdateUserRoleMutation,
+  useUpdateUserStatusMutation,
 } from "../../features/user/api";
 import { toast } from "sonner";
 
@@ -14,6 +15,7 @@ export default function Users() {
     refetch,
   } = useGetAllUsersQuery(undefined);
   const [updateUserRole] = useUpdateUserRoleMutation();
+  const [updateUserStatus] = useUpdateUserStatusMutation();
 
   const tableData = usersData?.data.map(
     ({ name, role, email, createdAt, status, _id }) => ({
@@ -26,16 +28,16 @@ export default function Users() {
     })
   );
 
-  const getStatusTag = (status: string) => {
-    switch (status) {
-      case "active":
-        return <Tag color="green">Active</Tag>;
-      case "banned":
-        return <Tag color="red">Banned</Tag>;
-      default:
-        return <Tag color="default">Unknown</Tag>;
-    }
-  };
+  //   const getStatusTag = (status: string) => {
+  //     switch (status) {
+  //       case "active":
+  //         return <Tag color="green">Active</Tag>;
+  //       case "banned":
+  //         return <Tag color="red">Banned</Tag>;
+  //       default:
+  //         return <Tag color="default">Unknown</Tag>;
+  //     }
+  //   };
 
   // Function to handle role update
   const handleRoleUpdate = (value: string, userId: string) => {
@@ -55,6 +57,29 @@ export default function Users() {
         toast.error(
           err?.message ||
             "There was an issue while updating the role. Please try again.",
+          { id: toastId }
+        );
+      });
+  };
+
+  // Function to handle status update
+  const handleStatusUpdate = (value: string, userId: string) => {
+    const toastId = toast.loading("Updating status...");
+    const updateStatusData = {
+      id: userId,
+      data: { status: value },
+    };
+
+    updateUserStatus(updateStatusData)
+      .unwrap()
+      .then(() => {
+        toast.success("Status has been successfully updated.", { id: toastId });
+        refetch();
+      })
+      .catch((err) => {
+        toast.error(
+          err?.message ||
+            "There was an issue while updating the status. Please try again.",
           { id: toastId }
         );
       });
@@ -90,7 +115,16 @@ export default function Users() {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (status) => getStatusTag(status),
+      render: (status, record) => (
+        <Select
+          defaultValue={status}
+          style={{ width: 120 }}
+          onChange={(value) => handleStatusUpdate(value, record.key)}
+        >
+          <Select.Option value="active">Active</Select.Option>
+          <Select.Option value="banned">Banned</Select.Option>
+        </Select>
+      ),
     },
     {
       title: "Created At",
