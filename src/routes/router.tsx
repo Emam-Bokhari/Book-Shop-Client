@@ -10,6 +10,7 @@ import ShoppingCart from "../pages/ShoppingCart";
 import NavOnlyLayout from "../components/layout/NavOnlyLayout";
 import NotFoundPage from "../pages/NotFoundPage";
 import PrivateRoute from "../components/common/PrivateRoute";
+import OrderHistory from "../pages/OrderHistory";
 
 export const publicRoutes = [
   { path: "/", element: <Home />, layout: DefaultLayout },
@@ -20,6 +21,15 @@ export const publicRoutes = [
     element: (
       <PrivateRoute>
         <ShoppingCart />
+      </PrivateRoute>
+    ),
+    layout: DefaultLayout,
+  },
+  {
+    path: "/order-history",
+    element: (
+      <PrivateRoute>
+        <OrderHistory />
       </PrivateRoute>
     ),
     layout: DefaultLayout,
