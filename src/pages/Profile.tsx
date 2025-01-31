@@ -5,7 +5,7 @@ import {
   FileImageOutlined,
 } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../features/auth/redux/authSlice"; // Import the selector
+import { selectCurrentUser } from "../features/auth/redux/authSlice";
 
 const { Option } = Select;
 const { useToken } = theme;

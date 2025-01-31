@@ -22,6 +22,7 @@ import { RootState } from "../../redux/store";
 import { logout } from "../../features/auth/redux/authSlice";
 import { useMediaQuery } from "react-responsive";
 import logo from "../../assets/logo/Green-Leaf.png";
+import { DashboardOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -69,8 +70,17 @@ export default function Navbar() {
       >
         <NavLink to="/order-history">Order History</NavLink>
       </Menu.Item>
+      {user?.role === "admin" && (
+        <Menu.Item
+          key="3"
+          icon={<DashboardOutlined style={{ fontSize: "16px" }} />}
+          style={{ marginBottom: "10px" }}
+        >
+          <NavLink to="/dashboard">Dashboard</NavLink>
+        </Menu.Item>
+      )}
       <Menu.Item
-        key="3"
+        key="4"
         icon={<LogoutOutlined style={{ fontSize: "16px" }} />}
         onClick={handleLogout}
       >
@@ -198,11 +208,16 @@ export default function Navbar() {
         {user ? (
           <>
             <Button type="text" block style={{ marginTop: "10px" }}>
-              <NavLink to="/profile">Unknown</NavLink>
+              <NavLink to="/profile">My Profile</NavLink>
             </Button>
             <Button type="text" block style={{ marginTop: "10px" }}>
               <NavLink to="/order-history">Order History</NavLink>
             </Button>
+            {user?.role === "admin" && (
+              <Button type="text" block style={{ marginTop: "10px" }}>
+                <NavLink to="/dashboard">Dashboard</NavLink>
+              </Button>
+            )}
             <Button
               type="text"
               block

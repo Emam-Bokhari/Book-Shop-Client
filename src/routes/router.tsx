@@ -12,6 +12,8 @@ import NotFoundPage from "../pages/NotFoundPage";
 import PrivateRoute from "../components/common/PrivateRoute";
 import OrderHistory from "../pages/OrderHistory";
 import Profile from "../pages/Profile";
+import Dashboard from "../pages/Dashboard";
+import DashboardLayout from "../components/layout/DashboardLayout";
 
 export const publicRoutes = [
   { path: "/", element: <Home />, layout: DefaultLayout },
@@ -34,6 +36,15 @@ export const publicRoutes = [
       </PrivateRoute>
     ),
     layout: DefaultLayout,
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute role="admin">
+        <Dashboard />
+      </PrivateRoute>
+    ),
+    layout: DashboardLayout,
   },
   {
     path: "/profile",
