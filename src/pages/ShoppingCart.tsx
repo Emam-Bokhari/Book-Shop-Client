@@ -1,12 +1,20 @@
-import { Table, Button, Card, Row, Col, Input } from "antd";
+import { Table, Button, Card, Row, Col } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { removeFromCart } from "../features/cart/redux/cartSlice";
+import { clearCart, removeFromCart } from "../features/cart/redux/cartSlice";
+import ReusableForm from "../components/common/ReusableForm";
+import ReusableInput from "../components/common/ReusableInput";
+import { useAddOrderMutation } from "../features/order/api";
 
 export default function ShoppingCart() {
   const shoppingCartData = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch();
+  // const token = useSelector((state: RootState) => state.auth.token);
+  const [order] = useAddOrderMutation();
+
+  // console.log("Authorization header:", `${token.token}`);
+  // console.log(token.token);
 
   const tableData = shoppingCartData?.map(
     ({ id, title, image, price, quantity }) => ({
@@ -76,6 +84,34 @@ export default function ShoppingCart() {
     },
   ];
 
+  const onSubmit = async (formData) => {
+    try {
+      const products = shoppingCartData?.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      }));
+
+      const orderData = {
+        products,
+        shippingAddressDetails: formData,
+      };
+
+      const response = await order(orderData).unwrap();
+      const paymentUrl = response.data.paymentUrl;
+
+      // Clear cart from localStorage and Redux store
+      localStorage.removeItem("cart");
+      dispatch(clearCart());
+
+      // redirect payment url
+      window.location.href = paymentUrl;
+
+      // console.log("order data", orderData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
       <Row gutter={[20, 20]}>
@@ -106,21 +142,63 @@ export default function ShoppingCart() {
           </Card>
 
           <Card title="Shipping Address" style={{ textAlign: "center" }}>
-            <Input placeholder="Full Name" style={{ marginBottom: "10px" }} />
-            <Input
-              placeholder="Street Address"
-              style={{ marginBottom: "10px" }}
-            />
-            <Input placeholder="City" style={{ marginBottom: "10px" }} />
-            <Input
-              placeholder="State/Province"
-              style={{ marginBottom: "10px" }}
-            />
-            <Input placeholder="Postal Code" style={{ marginBottom: "10px" }} />
-            <Input placeholder="Country" style={{ marginBottom: "10px" }} />
-            <Button type="primary" block style={{ marginTop: "10px" }}>
-              Proceed to Checkout
-            </Button>
+            <ReusableForm onSubmit={onSubmit}>
+              <ReusableInput
+                type="text"
+                name="name"
+                placeholder="Enter Your Name"
+                rules={[{ required: true, message: "Please enter your name" }]}
+              />
+              <ReusableInput
+                type="text"
+                name="phone"
+                placeholder="Enter You Contact Number"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your contact number",
+                  },
+                ]}
+              />
+              <ReusableInput
+                type="text"
+                name="address"
+                placeholder="Enter Your Address"
+                rules={[
+                  { required: true, message: "Please enter your address" },
+                ]}
+              />
+              <ReusableInput
+                type="text"
+                name="postalCode"
+                placeholder="Enter Your Postal Code"
+                rules={[
+                  { required: true, message: "Please enter your postal code" },
+                ]}
+              />
+              <ReusableInput
+                type="text"
+                name="city"
+                placeholder="Enter Your City"
+                rules={[{ required: true, message: "Please enter your city" }]}
+              />
+              <ReusableInput
+                type="text"
+                name="country"
+                placeholder="Enter Your Country"
+                rules={[
+                  { required: true, message: "Please enter your country" },
+                ]}
+              />
+              <Button
+                htmlType="submit"
+                type="primary"
+                block
+                style={{ marginTop: "10px" }}
+              >
+                Proceed to Checkout
+              </Button>
+            </ReusableForm>
           </Card>
         </Col>
       </Row>
