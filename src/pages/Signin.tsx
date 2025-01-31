@@ -27,7 +27,7 @@ export default function Signin() {
       toast.success("Login successful", { id: toastId, duration: 2000 });
       // console.log("User Signed In:", user);
       const redirectPath = location.state?.from.pathname || "/";
-      console.log(redirectPath);
+      // console.log(redirectPath);
       navigate(redirectPath, { replace: true });
     } catch (err) {
       console.log(err);

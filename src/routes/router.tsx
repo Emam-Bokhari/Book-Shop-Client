@@ -16,6 +16,8 @@ import Dashboard from "../pages/Dashboard";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import CreateUser from "../pages/admin/CreateUser";
 import Users from "../pages/admin/Users";
+import CreateProduct from "../pages/admin/productManagement/CreateProduct";
+import Products from "../pages/admin/productManagement/Products";
 
 export const publicRoutes = [
   { path: "/", element: <Home />, layout: DefaultLayout },
@@ -71,6 +73,24 @@ export const publicRoutes = [
     element: (
       <PrivateRoute role="admin">
         <Users />
+      </PrivateRoute>
+    ),
+    layout: DashboardLayout,
+  },
+  {
+    path: "/create-product",
+    element: (
+      <PrivateRoute role="admin">
+        <CreateProduct />
+      </PrivateRoute>
+    ),
+    layout: DashboardLayout,
+  },
+  {
+    path: "/products",
+    element: (
+      <PrivateRoute role="admin">
+        <Products />
       </PrivateRoute>
     ),
     layout: DashboardLayout,

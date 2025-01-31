@@ -4,6 +4,13 @@ import { ApiResponse, TProduct } from "../../types";
 
 const productsApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
+        addProduct: builder.mutation({
+            query: (productData) => ({
+                url: "/products",
+                method: "POST",
+                body: productData,
+            })
+        }),
         getAllProducts: builder.query({
             query: () => ({
                 url: "/products",
@@ -31,4 +38,4 @@ const productsApi = baseApi.injectEndpoints({
     })
 })
 
-export const { useGetAllProductsQuery, useGetProductQuery } = productsApi;
+export const { useGetAllProductsQuery, useGetProductQuery, useAddProductMutation } = productsApi;
