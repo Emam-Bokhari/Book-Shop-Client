@@ -26,19 +26,34 @@ export default function UpdateProduct() {
   const onSubmit = async (data: TProduct) => {
     const toastId = toast.loading("Updating product...");
 
+    const updatedData = {
+      ...data,
+      price: data.price ? Number(data.price) : productData?.data?.price,
+      quantity: data.quantity
+        ? Number(data.quantity)
+        : productData?.data?.quantity,
+      rating: data.rating ? Number(data.rating) : productData?.data?.rating,
+      pages: data.pages ? Number(data.pages) : productData?.data?.pages,
+    };
+
     try {
-      const updatedProduct = await updateProduct({ id, data });
-      console.log(updatedProduct);
-      toast.success("Update product successfully!", {
+      await updateProduct({
+        id,
+        data: updatedData,
+      }).unwrap();
+      toast.success("Product updated successfully!", {
         id: toastId,
         duration: 2000,
       });
-      navigate("/product");
-    } catch (err) {
-      toast.error(err.message || "Product update failed. Please try again.", {
-        id: toastId,
-        duration: 2000,
-      });
+      navigate("/products");
+    } catch (err: any) {
+      console.error("Update Error:", err);
+      const errorMessage =
+        err?.data?.message ||
+        err?.message ||
+        "Product update failed. Please try again.";
+
+      toast.error(errorMessage, { id: toastId, duration: 4000 });
     }
   };
 
@@ -103,9 +118,6 @@ export default function UpdateProduct() {
                   name="title"
                   label="Title"
                   placeholder="Enter Book Title Name"
-                  rules={[
-                    { required: true, message: "Please enter book title name" },
-                  ]}
                   defaultValue={productData?.data?.title}
                 />
               </Col>
@@ -114,12 +126,6 @@ export default function UpdateProduct() {
                   label="Description"
                   name="description"
                   placeholder="Enter Book Description"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter book description",
-                    },
-                  ]}
                   defaultValue={productData?.data?.description}
                 />
               </Col>
@@ -137,12 +143,6 @@ export default function UpdateProduct() {
                   label="Author"
                   name="author"
                   placeholder="Enter Book Author Name"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter book author name",
-                    },
-                  ]}
                   defaultValue={productData?.data?.author}
                 />
               </Col>
@@ -152,9 +152,6 @@ export default function UpdateProduct() {
                   label="Price"
                   name="price"
                   placeholder="Enter Book Price"
-                  rules={[
-                    { required: true, message: "Please enter book price" },
-                  ]}
                   defaultValue={productData?.data?.price}
                 />
               </Col>
@@ -164,12 +161,6 @@ export default function UpdateProduct() {
                   name="image"
                   label="Image Url Link"
                   placeholder="Enter Book Image Url Link"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter book image url link",
-                    },
-                  ]}
                   defaultValue={productData?.data?.image}
                 />
               </Col>
@@ -179,9 +170,6 @@ export default function UpdateProduct() {
                   label="Publisher"
                   name="publisher"
                   placeholder="Enter Book Publisher"
-                  rules={[
-                    { required: true, message: "Please enter book publisher" },
-                  ]}
                   defaultValue={productData?.data?.publisher}
                 />
               </Col>
@@ -197,9 +185,6 @@ export default function UpdateProduct() {
                   label="Edition"
                   name="edition"
                   placeholder="Enter Book Edition"
-                  rules={[
-                    { required: true, message: "Please enter book edition" },
-                  ]}
                   defaultValue={productData?.data?.edition}
                 />
               </Col>
@@ -217,7 +202,6 @@ export default function UpdateProduct() {
                   label="Pages"
                   name="pages"
                   placeholder="Enter Pages"
-                  rules={[{ required: true, message: "Please enter pages" }]}
                   defaultValue={productData?.data?.pages}
                 />
               </Col>
@@ -227,7 +211,6 @@ export default function UpdateProduct() {
                   label="Rating"
                   name="rating"
                   placeholder="Enter Rating"
-                  rules={[{ required: true, message: "Please enter rating" }]}
                   defaultValue={productData?.data?.rating}
                 />
               </Col>
@@ -245,7 +228,6 @@ export default function UpdateProduct() {
                   label="Quantity"
                   name="quantity"
                   placeholder="Enter Quantity"
-                  rules={[{ required: true, message: "Please enter quantity" }]}
                   defaultValue={productData?.data?.quantity}
                 />
               </Col>

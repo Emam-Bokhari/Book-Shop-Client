@@ -13,11 +13,21 @@ export default function Users() {
   const {
     data: usersData,
     isFetching,
+    error: fetchError,
     refetch,
   } = useGetAllUsersQuery(undefined);
   const [updateUserRole] = useUpdateUserRoleMutation();
   const [updateUserStatus] = useUpdateUserStatusMutation();
   const [deleteUser] = useDeleteUserMutation();
+
+  if (fetchError) {
+    const errorMessage =
+      "data" in fetchError
+        ? fetchError.data?.message || "Failed to fetch users."
+        : fetchError.message || "An unexpected error occurred.";
+
+    toast.error(errorMessage);
+  }
 
   const tableData = usersData?.data.map(
     ({ name, role, email, createdAt, status, _id }) => ({
@@ -31,66 +41,45 @@ export default function Users() {
   );
 
   // Function to handle role update
-  const handleRoleUpdate = (value: string, userId: string) => {
+  const handleRoleUpdate = async (value, userId) => {
     const toastId = toast.loading("Updating role...");
-    const updateRoleData = {
-      id: userId,
-      data: { role: value },
-    };
-
-    updateUserRole(updateRoleData)
-      .unwrap()
-      .then(() => {
-        toast.success("Role has been successfully updated.", { id: toastId });
-        refetch();
-      })
-      .catch((err) => {
-        toast.error(
-          err?.message ||
-            "There was an issue while updating the role. Please try again.",
-          { id: toastId }
-        );
+    try {
+      await updateUserRole({ id: userId, data: { role: value } }).unwrap();
+      toast.success("Role has been successfully updated.", { id: toastId });
+      refetch();
+    } catch (err) {
+      toast.error(err?.data?.message || "Error updating role.", {
+        id: toastId,
       });
+    }
   };
 
   // Function to handle status update
-  const handleStatusUpdate = (value: string, userId: string) => {
+  const handleStatusUpdate = async (value, userId) => {
     const toastId = toast.loading("Updating status...");
-    const updateStatusData = {
-      id: userId,
-      data: { status: value },
-    };
-
-    updateUserStatus(updateStatusData)
-      .unwrap()
-      .then(() => {
-        toast.success("Status has been successfully updated.", { id: toastId });
-        refetch();
-      })
-      .catch((err) => {
-        toast.error(
-          err?.message ||
-            "There was an issue while updating the status. Please try again.",
-          { id: toastId }
-        );
+    try {
+      await updateUserStatus({ id: userId, data: { status: value } }).unwrap();
+      toast.success("Status has been successfully updated.", { id: toastId });
+      refetch();
+    } catch (err) {
+      toast.error(err?.data?.message || "Error updating status.", {
+        id: toastId,
       });
+    }
   };
 
   // Function to handle user deletion
-  const handleDeleteUser = (userId: string) => {
+  const handleDeleteUser = async (userId) => {
     const toastId = toast.loading("Deleting user...");
-    deleteUser(userId)
-      .unwrap()
-      .then(() => {
-        toast.success("User has been successfully deleted.", { id: toastId });
-        refetch();
-      })
-      .catch((err) => {
-        toast.error(
-          err?.message || "There was an issue while deleting the user.",
-          { id: toastId }
-        );
+    try {
+      await deleteUser(userId).unwrap();
+      toast.success("User has been successfully deleted.", { id: toastId });
+      refetch();
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Error deleting user.", {
+        id: toastId,
       });
+    }
   };
 
   const columns = [

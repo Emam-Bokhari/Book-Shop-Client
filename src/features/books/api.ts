@@ -9,13 +9,15 @@ const productsApi = baseApi.injectEndpoints({
                 url: "/products",
                 method: "POST",
                 body: productData,
-            })
+            }),
+            invalidatesTags: ["products"]
         }),
         getAllProducts: builder.query({
             query: () => ({
                 url: "/products",
                 method: "GET",
             }),
+            providesTags: ["products"],
             transformResponse: (response: ApiResponse<TProduct[]>) => {
                 return {
                     data: response?.data,
@@ -40,9 +42,18 @@ const productsApi = baseApi.injectEndpoints({
                 method: "PATCH",
                 body: args.data,
             }),
+            invalidatesTags: ["products"]
+        }),
+        deleteProduct: builder.mutation({
+            query: (id) => ({
+                url: `/products/${id}`,
+                method: "DELETE",
+
+            }),
+            invalidatesTags: ["products"]
         }),
 
     })
 })
 
-export const { useGetAllProductsQuery, useGetProductQuery, useAddProductMutation, useUpdateProductMutation } = productsApi;
+export const { useGetAllProductsQuery, useGetProductQuery, useAddProductMutation, useUpdateProductMutation, useDeleteProductMutation } = productsApi;

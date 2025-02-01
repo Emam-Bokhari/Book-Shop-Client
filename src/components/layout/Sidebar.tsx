@@ -3,7 +3,6 @@ import { Fragment } from "react/jsx-runtime";
 import {
   AppstoreAddOutlined,
   AppstoreOutlined,
-  EditOutlined,
   ShoppingCartOutlined,
   TeamOutlined,
   UnorderedListOutlined,
@@ -50,11 +49,6 @@ const menuItems = [
         key: "all-products",
         label: <Link to="/products">Products</Link>,
         icon: <UnorderedListOutlined />,
-      },
-      {
-        key: "update-product",
-        label: <Link to="/update-product">Update Product</Link>,
-        icon: <EditOutlined />,
       },
     ],
   },

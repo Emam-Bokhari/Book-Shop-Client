@@ -1,15 +1,31 @@
 import { Fragment } from "react";
 import { Button, Col, Row, Space, Table } from "antd";
-import { useGetAllProductsQuery } from "../../../features/books/api";
+import {
+  useDeleteProductMutation,
+  useGetAllProductsQuery,
+} from "../../../features/books/api";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Products() {
-  const {
-    data: productsData,
-    isFetching,
-    refetch,
-  } = useGetAllProductsQuery(undefined);
-  console.log(productsData);
+  const { data: productsData, isFetching } = useGetAllProductsQuery(undefined);
+  // console.log(productsData);
+  const [deleteProduct] = useDeleteProductMutation();
+
+  // Function to handle user deletion
+  const handleDeleteProduct = async (id: string) => {
+    const toastId = toast.loading("Deleting product...");
+
+    try {
+      await deleteProduct(id).unwrap();
+      toast.success("Product has been successfully deleted.", { id: toastId });
+    } catch (err: any) {
+      toast.error(
+        err?.data?.message || "There was an issue while deleting the product.",
+        { id: toastId }
+      );
+    }
+  };
 
   const tableData = productsData?.data.map(
     ({ title, category, author, price, image, _id, language, quantity }) => ({
@@ -76,7 +92,9 @@ export default function Products() {
             <Link to={`/update/products/${item.key}`}>
               <Button>Update</Button>
             </Link>
-            <Button>Delete</Button>
+            <Button onClick={() => handleDeleteProduct(item.key)}>
+              Delete
+            </Button>
           </Space>
         );
       },
