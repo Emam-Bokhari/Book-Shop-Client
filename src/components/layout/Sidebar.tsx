@@ -58,13 +58,8 @@ const menuItems = [
     icon: <ShoppingCartOutlined />,
     children: [
       {
-        key: "create-order",
-        label: <Link to="/create-order">Create Order</Link>,
-        icon: <ShoppingCartOutlined />,
-      },
-      {
         key: "all-orders",
-        label: <Link to="/all-orders">All Orders</Link>,
+        label: <Link to="/orders">All Orders</Link>,
         icon: <UnorderedListOutlined />,
       },
     ],

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment } from "react";
 import { Button, Col, Row, Space, Table } from "antd";
 import {

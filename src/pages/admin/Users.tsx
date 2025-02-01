@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment } from "react";
-import { Col, Row, Table, Tag, Select, Button } from "antd";
+import { Col, Row, Table, Select, Button } from "antd";
 import moment from "moment-timezone";
 import {
   useDeleteUserMutation,
@@ -47,7 +48,7 @@ export default function Users() {
       await updateUserRole({ id: userId, data: { role: value } }).unwrap();
       toast.success("Role has been successfully updated.", { id: toastId });
       refetch();
-    } catch (err) {
+    } catch (err: any) {
       toast.error(err?.data?.message || "Error updating role.", {
         id: toastId,
       });

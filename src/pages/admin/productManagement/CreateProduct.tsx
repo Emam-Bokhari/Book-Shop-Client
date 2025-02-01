@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Col, Row, Typography } from "antd";
 import { Fragment } from "react/jsx-runtime";
 import ReusableForm from "../../../components/common/ReusableForm";
@@ -7,6 +8,8 @@ import ReusableDatePicker from "../../../components/common/ReusableDatePicker";
 import ReusableTextArea from "../../../components/common/ReusableTextArea";
 import { useAddProductMutation } from "../../../features/books/api";
 import { toast } from "sonner";
+import { TProduct } from "../../../types";
+import { useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
@@ -45,11 +48,13 @@ const formatOptions = ["hardcover", "paperback", "eBook", "audioBook"].map(
 );
 
 export default function CreateProduct() {
+  const navigate = useNavigate();
+
   const [addProduct] = useAddProductMutation(undefined);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: TProduct) => {
     const toastId = toast.loading("Product creating...");
-    // console.log(data);
+
     const formattedData = {
       ...data,
       price: Number(data.price),
@@ -57,24 +62,24 @@ export default function CreateProduct() {
       rating: Number(data.rating),
       quantity: Number(data.quantity),
     };
-    console.log(formattedData);
 
     try {
-      const response = await addProduct(formattedData).unwrap();
-      //   console.log("Product added successfully", response);
-      addProduct(response);
+      await addProduct(formattedData).unwrap();
       toast.success("Product added successfully", {
         id: toastId,
         duration: 2000,
       });
-    } catch (err) {
-      toast.error(
-        err.message || "Failed to add product. Please try again later",
-        {
-          id: toastId,
-          duration: 2000,
-        }
-      );
+      navigate("/products");
+    } catch (err: any) {
+      const errorMessage =
+        err?.data?.message ||
+        err?.message ||
+        "Failed to add product. Please try again later.";
+
+      toast.error(errorMessage, {
+        id: toastId,
+        duration: 2000,
+      });
     }
   };
 

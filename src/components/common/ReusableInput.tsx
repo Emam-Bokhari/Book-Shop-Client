@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Form, Input, InputNumber } from "antd";
 import { ReactNode } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -9,7 +9,7 @@ type TReusableInputProps = {
   icon?: ReactNode;
   placeholder?: string;
   defaultValue?: string | number;
-  rules?: Array<{ required: boolean; message: string }>;
+  rules?: any;
 };
 
 export default function ReusableInput({
@@ -22,21 +22,41 @@ export default function ReusableInput({
   rules,
 }: TReusableInputProps) {
   const { control } = useFormContext();
+
   return (
     <Controller
       control={control}
       name={name}
-      render={({ field }) => (
-        <Form.Item label={label} rules={rules}>
-          <Input
-            {...field}
-            type={type}
-            id={name}
-            prefix={icon}
-            size="middle"
-            placeholder={placeholder}
-            defaultValue={defaultValue}
-          />
+      rules={rules}
+      render={({ field, fieldState }) => (
+        <Form.Item
+          label={label}
+          validateStatus={fieldState.error ? "error" : ""}
+          help={fieldState.error?.message}
+        >
+          {type === "number" ? (
+            <InputNumber
+              {...field}
+              id={name}
+              size="middle"
+              placeholder={placeholder}
+              defaultValue={defaultValue}
+              style={{ width: "100%" }}
+            />
+          ) : (
+            <Input
+              {...field}
+              type={type}
+              id={name}
+              prefix={icon}
+              size="middle"
+              placeholder={placeholder}
+              defaultValue={defaultValue}
+            />
+          )}
+          {fieldState.error && (
+            <small style={{ color: "red" }}>{fieldState.error?.message}</small>
+          )}
         </Form.Item>
       )}
     />
