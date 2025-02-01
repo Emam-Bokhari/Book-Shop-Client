@@ -1,15 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment } from "react";
-import { Button, Col, Row, Space, Table } from "antd";
+import { Fragment, useState } from "react";
+import { Button, Col, Pagination, Row, Space, Table } from "antd";
 import {
   useDeleteProductMutation,
   useGetAllProductsQuery,
 } from "../../../features/books/api";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { TQueryParam } from "../../../types/global";
+
+export type ProductItem = {
+  key: string;
+  title: string;
+  category: string;
+  author: string;
+  price: string;
+  image: string;
+  language: string;
+  quantity: number;
+};
 
 export default function Products() {
-  const { data: productsData, isFetching } = useGetAllProductsQuery(undefined);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [params, setParams] = useState<TQueryParam[]>([]);
+
+  const { data: productsData, isFetching } = useGetAllProductsQuery([
+    { name: "page", value: currentPage },
+    // { name: "limit", value: 5 },
+    ...params,
+  ]);
   // console.log(productsData);
   const [deleteProduct] = useDeleteProductMutation();
 
@@ -41,12 +61,15 @@ export default function Products() {
     })
   );
 
+  const metaData = productsData?.meta;
+  // console.log(metaData);
+
   const columns = [
     {
       title: "Image",
       dataIndex: "image",
       key: "image",
-      render: (imageLink) => (
+      render: (imageLink: string) => (
         <img src={imageLink} alt="Product" style={{ width: 50, height: 50 }} />
       ),
     },
@@ -59,6 +82,40 @@ export default function Products() {
       title: "Category",
       dataIndex: "category",
       key: "category",
+      filters: [
+        {
+          text: "Fiction",
+          value: "fiction",
+        },
+        {
+          text: "NonFiction",
+          value: "nonFiction",
+        },
+        {
+          text: "Academic",
+          value: "academic",
+        },
+        {
+          text: "Philosophy",
+          value: "philosophy",
+        },
+        {
+          text: "Children",
+          value: "children",
+        },
+        {
+          text: "Science",
+          value: "science",
+        },
+        {
+          text: "Religion",
+          value: "religion",
+        },
+        {
+          text: "History",
+          value: "history",
+        },
+      ],
     },
     {
       title: "Author",
@@ -74,6 +131,38 @@ export default function Products() {
       title: "Language",
       dataIndex: "language",
       key: "language",
+      filters: [
+        {
+          text: "Bengali",
+          value: "bengali",
+        },
+        {
+          text: "English",
+          value: "english",
+        },
+        {
+          text: "Arabic",
+          value: "arabic",
+        },
+        {
+          text: "Hindi",
+          value: "hindi",
+        },
+        {
+          text: "Spanish",
+          value: "spanish",
+        },
+        {
+          text: "French",
+          value: "french",
+        },
+        {
+          text: "German",
+          value: "german",
+        },
+      ],
+      // onFilter: (value, record) => record.language.startsWith(value as string),
+      // filterSearch: true,
     },
     {
       title: "Quantity",
@@ -84,7 +173,7 @@ export default function Products() {
       title: "Action",
       dataIndex: "",
       key: "x",
-      render: (item) => {
+      render: (item: ProductItem) => {
         return (
           <Space>
             <Link to={`/products/${item.key}`}>
@@ -103,6 +192,23 @@ export default function Products() {
     },
   ];
 
+  const onChange = (_pagination, filters, _sorter, extra) => {
+    console.log("params", filters, extra);
+    if (extra.action === "filter") {
+      const queryParams: TQueryParam[] = [];
+
+      filters.language?.forEach((item) =>
+        queryParams?.push({ name: "language", value: item })
+      );
+
+      filters.category?.forEach((item) =>
+        queryParams?.push({ name: "category", value: item })
+      );
+
+      setParams(queryParams);
+    }
+  };
+
   return (
     <Fragment>
       <div style={{ width: "100%", margin: "0 auto", padding: "20px" }}>
@@ -120,7 +226,16 @@ export default function Products() {
                 pagination={false}
                 scroll={{ x: "max-content" }}
                 loading={isFetching}
+                onChange={onChange}
                 style={{ height: "100%" }}
+              />
+              <Pagination
+                style={{ marginTop: "20px" }}
+                align="end"
+                current={currentPage}
+                onChange={(page) => setCurrentPage(page)}
+                pageSize={metaData?.limit}
+                total={metaData?.total}
               />
             </div>
           </Col>

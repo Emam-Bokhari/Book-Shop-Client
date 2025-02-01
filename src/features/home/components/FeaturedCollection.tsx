@@ -21,7 +21,12 @@ export default function FeaturedCollection() {
 
   // console.log(booksData);
 
-  function handleAddToCart(book: { id: string; title: string; price: number }) {
+  function handleAddToCart(book: {
+    id: string;
+    title: string;
+    price: number;
+    image: string;
+  }) {
     dispatch(addToCart(book));
   }
 
@@ -103,6 +108,7 @@ export default function FeaturedCollection() {
                         id: book._id,
                         title: book.title,
                         price: book.price,
+                        image: book.image,
                       })
                     }
                   />

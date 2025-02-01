@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Button, Card, Typography, Checkbox } from "antd";
 import { LockOutlined, UserOutlined, MailOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,19 +18,22 @@ export default function Signup() {
     const toastId = toast.loading("Creating your account...");
     try {
       // console.log("User Signed Up:", data);
-      const response = await signup(data).unwrap();
+      await signup(data).unwrap();
       toast.success("Your account has been created successfully!", {
         id: toastId,
         duration: 2000,
       });
       navigate("/");
-      console.log(response);
-    } catch (err) {
+      // console.log(response);
+    } catch (err: any) {
       // console.log(err);
-      toast.error(err.message || "Registration failed. Please try again.", {
-        id: toastId,
-        duration: 2000,
-      });
+      toast.error(
+        err.data.message || "Registration failed. Please try again.",
+        {
+          id: toastId,
+          duration: 2000,
+        }
+      );
     }
   };
 

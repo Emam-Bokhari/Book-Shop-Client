@@ -4,13 +4,14 @@ const { Title, Paragraph } = Typography;
 
 const { useToken } = theme;
 
-interface BookCardProps {
-  title: string;
-  image: string;
-  price: number;
-  rating?: number;
+export type BookCardProps = {
   id: string;
-}
+  title: string;
+  price: number;
+  image: string;
+  rating: number;
+  onAddToCart?: () => void;
+};
 
 export default function BookCard({
   title,

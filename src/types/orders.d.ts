@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { ApiResponse } from './api';
 
 export type TShippingAddressDetails = {
     name: string;
@@ -7,6 +8,16 @@ export type TShippingAddressDetails = {
     postalCode: string;
     city: string;
     country: string;
+};
+
+export type TProduct = {
+    productId: {
+        title: string;
+        category: string;
+        author: string;
+        description: string;
+    };
+    quantity: number;
 };
 
 export type TOrder = {
@@ -26,27 +37,6 @@ export type TOrder = {
     transactionId?: string;
 };
 
-export type TPaymentResponse = {
-    total_amount: number;
-    currency: string;
-    tran_id: string;
-    success_url: string;
-    fail_url: string;
-    cancel_url: string;
-    shipping_method: string;
-    product_name: string;
-    product_category: string;
-    product_profile: string;
-    cus_name: string;
-    cus_email: string;
-    cus_add1: string;
-    cus_city: string;
-    cus_postcode: string;
-    cus_country: string;
-    cus_phone: string;
-    ship_name: string;
-    ship_add1: string;
-    ship_city: string;
-    ship_postcode: string;
-    ship_country: string;
-};
+
+
+export type OrderApiResponse = ApiResponse<TOrder[]>

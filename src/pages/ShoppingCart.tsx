@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Table, Button, Card, Row, Col } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +7,29 @@ import { clearCart, removeFromCart } from "../features/cart/redux/cartSlice";
 import ReusableForm from "../components/common/ReusableForm";
 import ReusableInput from "../components/common/ReusableInput";
 import { useAddOrderMutation } from "../features/order/api";
+import { toast } from "sonner";
+
+export interface CartItem {
+  id: string;
+  title: string;
+  image: string;
+  price: number;
+  quantity: number;
+}
+
+export interface ShippingAddressDetails {
+  name: string;
+  phone: string;
+  address: string;
+  postalCode: string;
+  city: string;
+  country: string;
+}
+
+export interface OrderRequest {
+  products: { productId: string; quantity: number }[];
+  shippingAddressDetails: ShippingAddressDetails;
+}
 
 export default function ShoppingCart() {
   const shoppingCartData = useSelector((state: RootState) => state.cart.items);
@@ -17,7 +41,7 @@ export default function ShoppingCart() {
   // console.log(token.token);
 
   const tableData = shoppingCartData?.map(
-    ({ id, title, image, price, quantity }) => ({
+    ({ id, title, image, price, quantity }: CartItem) => ({
       key: id,
       title,
       image,
@@ -44,7 +68,7 @@ export default function ShoppingCart() {
       title: "Image",
       dataIndex: "image",
       key: "image",
-      render: (imageLink) => (
+      render: (imageLink: string) => (
         <img src={imageLink} alt="Product" style={{ width: 50, height: 50 }} />
       ),
     },
@@ -57,7 +81,7 @@ export default function ShoppingCart() {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      render: (item) => `$${item.toFixed(2)}`,
+      render: (item: number) => `$${item.toFixed(2)}`,
     },
     {
       title: "Quantity",
@@ -68,14 +92,13 @@ export default function ShoppingCart() {
       title: "Total",
       dataIndex: "total",
       key: "total",
-      render: (text) => `$${text.toFixed(2)}`,
+      render: (item: number) => `$${item.toFixed(2)}`,
     },
     {
       title: "Action",
       key: "action",
-      render: (_, record) => (
+      render: (_: any, record: { key: string }) => (
         <Button
-          type="danger"
           icon={<DeleteOutlined />}
           style={{ color: "red" }}
           onClick={() => dispatch(removeFromCart(record.key))}
@@ -84,7 +107,8 @@ export default function ShoppingCart() {
     },
   ];
 
-  const onSubmit = async (formData) => {
+  const onSubmit = async (formData: ShippingAddressDetails) => {
+    const toastId = toast.loading("Processing your order...");
     try {
       const products = shoppingCartData?.map((item) => ({
         productId: item.id,
@@ -106,9 +130,15 @@ export default function ShoppingCart() {
       // redirect payment url
       window.location.href = paymentUrl;
 
+      toast.success("Order placed successfully!", { id: toastId });
+
       // console.log("order data", orderData);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      toast.error(
+        err.data.message || "Error while processing order.Please try again",
+        { id: toastId }
+      );
+      // console.log(err);
     }
   };
 

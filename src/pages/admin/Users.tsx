@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment } from "react";
-import { Col, Row, Table, Select, Button } from "antd";
+import { Fragment, useState } from "react";
+import { Col, Row, Table, Select, Button, Pagination } from "antd";
 import moment from "moment-timezone";
 import {
   useDeleteUserMutation,
@@ -9,30 +9,50 @@ import {
   useUpdateUserStatusMutation,
 } from "../../features/user/api";
 import { toast } from "sonner";
+import { TQueryParam } from "../../types/global";
+
+// src/types.ts
+export type User = {
+  _id: string;
+  key?: string;
+  name: string;
+  email: string;
+  role: string;
+  status: "active" | "banned";
+  createdAt: string;
+};
+
+export type UpdateRoleData = {
+  id: string;
+  data: { role: string };
+};
+
+export type UpdateStatusData = {
+  id: string;
+  data: { status: string };
+};
 
 export default function Users() {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [params, setParams] = useState<TQueryParam[]>([]);
+
   const {
     data: usersData,
     isFetching,
-    error: fetchError,
     refetch,
-  } = useGetAllUsersQuery(undefined);
+  } = useGetAllUsersQuery([
+    { name: "page", value: currentPage },
+    // { name: "limit", value: 1 },
+    ...params,
+  ]);
   const [updateUserRole] = useUpdateUserRoleMutation();
   const [updateUserStatus] = useUpdateUserStatusMutation();
   const [deleteUser] = useDeleteUserMutation();
 
-  if (fetchError) {
-    const errorMessage =
-      "data" in fetchError
-        ? fetchError.data?.message || "Failed to fetch users."
-        : fetchError.message || "An unexpected error occurred.";
-
-    toast.error(errorMessage);
-  }
-
-  const tableData = usersData?.data.map(
+  const tableData: (User & { key: string })[] = (usersData?.data || []).map(
     ({ name, role, email, createdAt, status, _id }) => ({
-      key: _id,
+      key: _id || "", // Ensure `key` is always a string
       name,
       email,
       role,
@@ -42,7 +62,7 @@ export default function Users() {
   );
 
   // Function to handle role update
-  const handleRoleUpdate = async (value, userId) => {
+  const handleRoleUpdate = async (value: string, userId: string) => {
     const toastId = toast.loading("Updating role...");
     try {
       await updateUserRole({ id: userId, data: { role: value } }).unwrap();
@@ -56,13 +76,13 @@ export default function Users() {
   };
 
   // Function to handle status update
-  const handleStatusUpdate = async (value, userId) => {
+  const handleStatusUpdate = async (value: string, userId: string) => {
     const toastId = toast.loading("Updating status...");
     try {
       await updateUserStatus({ id: userId, data: { status: value } }).unwrap();
       toast.success("Status has been successfully updated.", { id: toastId });
       refetch();
-    } catch (err) {
+    } catch (err: any) {
       toast.error(err?.data?.message || "Error updating status.", {
         id: toastId,
       });
@@ -70,7 +90,7 @@ export default function Users() {
   };
 
   // Function to handle user deletion
-  const handleDeleteUser = async (userId) => {
+  const handleDeleteUser = async (userId: string) => {
     const toastId = toast.loading("Deleting user...");
     try {
       await deleteUser(userId).unwrap();
@@ -82,6 +102,8 @@ export default function Users() {
       });
     }
   };
+
+  const metaData = usersData?.meta;
 
   const columns = [
     {
@@ -98,7 +120,7 @@ export default function Users() {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      render: (role, record) => (
+      render: (role: string, record: { key: string }) => (
         <Select
           defaultValue={role}
           style={{ width: 120 }}
@@ -108,12 +130,22 @@ export default function Users() {
           <Select.Option value="user">User</Select.Option>
         </Select>
       ),
+      filters: [
+        {
+          text: "Admin",
+          value: "admin",
+        },
+        {
+          text: "User",
+          value: "user",
+        },
+      ],
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (status, record) => (
+      render: (status: string, record: { key: string }) => (
         <Select
           defaultValue={status}
           style={{ width: 120 }}
@@ -123,6 +155,16 @@ export default function Users() {
           <Select.Option value="banned">Banned</Select.Option>
         </Select>
       ),
+      filters: [
+        {
+          text: "Active",
+          value: "active",
+        },
+        {
+          text: "Banned",
+          value: "banned",
+        },
+      ],
     },
     {
       title: "Created At",
@@ -132,13 +174,30 @@ export default function Users() {
     {
       title: "Actions",
       key: "actions",
-      render: (_, record) => (
+      render: (_: any, record: { key: string }) => (
         <Button danger onClick={() => handleDeleteUser(record.key)}>
           Delete
         </Button>
       ),
     },
   ];
+
+  const onChange = (_pagination, filters, _sorter, extra) => {
+    console.log("params", filters, extra);
+    if (extra.action === "filter") {
+      const queryParams: TQueryParam[] = [];
+
+      filters.role?.forEach((item) =>
+        queryParams?.push({ name: "role", value: item })
+      );
+
+      filters.status?.forEach((item) =>
+        queryParams?.push({ name: "status", value: item })
+      );
+
+      setParams(queryParams);
+    }
+  };
 
   return (
     <Fragment>
@@ -157,7 +216,16 @@ export default function Users() {
                 pagination={false}
                 scroll={{ x: "max-content" }}
                 loading={isFetching}
+                onChange={onChange}
                 style={{ height: "100%" }}
+              />
+              <Pagination
+                style={{ marginTop: "20px" }}
+                align="end"
+                current={currentPage}
+                onChange={(page) => setCurrentPage(page)}
+                pageSize={metaData?.limit}
+                total={metaData?.total}
               />
             </div>
           </Col>

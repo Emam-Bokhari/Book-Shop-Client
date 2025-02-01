@@ -5,33 +5,70 @@ import moment from "moment-timezone";
 import { useAppSelector } from "../redux/hook";
 import { selectCurrentUser } from "../features/auth/redux/authSlice";
 
+export interface TableData {
+  key: string;
+  paymentMethod: string;
+  totalAmount: number;
+  transactionId: string;
+  shippingAddress: string;
+  orderDate: string;
+  status: "pending" | "shipping" | "delivered";
+  userName: string;
+  userEmail: string;
+}
+
+export interface ShippingAddressDetails {
+  name: string;
+  phone: string;
+  address: string;
+  postalCode: string;
+  city: string;
+  country: string;
+}
+
+export interface OrderHistoryItem {
+  paymentMethod?: string;
+  status: "pending" | "shipping" | "delivered";
+  totalAmount: number;
+  transactionId: string;
+  shippingAddressDetails: ShippingAddressDetails;
+  orderDate: string;
+  userId: {
+    name: string;
+    email: string;
+  };
+}
+
 export default function OrderHistory() {
   const user = useAppSelector(selectCurrentUser);
   const email = user?.email;
   // console.log(email);
-  const { data: orderHistoryData } = useGetUserOrderHistoryQuery(email);
 
-  const tableData = orderHistoryData?.data.map(
-    ({
-      paymentMethod,
-      status,
-      totalAmount,
-      transactionId,
-      shippingAddressDetails,
-      orderDate,
-      userId,
-    }) => ({
-      key: transactionId,
-      paymentMethod,
-      totalAmount,
-      transactionId,
-      shippingAddress: `${shippingAddressDetails.city}, ${shippingAddressDetails.country}`,
-      orderDate: moment(orderDate).tz("Asia/Dhaka").format("YYYY-MMM-DD"),
-      status,
-      userName: userId.name,
-      userEmail: userId.email,
-    })
-  );
+  const { data: orderHistoryData, isFetching } =
+    useGetUserOrderHistoryQuery(email);
+
+  const tableData: TableData[] =
+    orderHistoryData?.data.map(
+      ({
+        paymentMethod,
+        status,
+        totalAmount,
+        transactionId,
+        shippingAddressDetails,
+        orderDate,
+        userId,
+      }: OrderHistoryItem) => ({
+        key: transactionId,
+        paymentMethod,
+        totalAmount,
+        transactionId,
+        shippingAddress: `${shippingAddressDetails.city}, ${shippingAddressDetails.country}`,
+        orderDate: moment(orderDate).tz("Asia/Dhaka").format("YYYY-MMM-DD"),
+        status,
+        userName: userId.name,
+        userEmail: userId.email,
+      })
+    ) || [];
   //   console.log(orderHistoryData);
 
   const getStatusTag = (status: string) => {
@@ -67,7 +104,7 @@ export default function OrderHistory() {
       title: "Total Amount",
       dataIndex: "totalAmount",
       key: "totalAmount",
-      render: (amount) => `$${amount.toFixed(2)}`,
+      render: (amount: number) => `$${amount.toFixed(2)}`,
     },
     {
       title: "Transaction ID",
@@ -83,7 +120,7 @@ export default function OrderHistory() {
       title: "Order Progress",
       dataIndex: "status",
       key: "status",
-      render: (status) => getStatusTag(status),
+      render: (status: string) => getStatusTag(status),
     },
     {
       title: "Shipping Address",
@@ -108,6 +145,7 @@ export default function OrderHistory() {
                 dataSource={tableData}
                 pagination={false}
                 scroll={{ x: "max-content" }}
+                loading={isFetching}
                 style={{ height: "100%" }}
               />
             </div>

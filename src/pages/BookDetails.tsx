@@ -43,10 +43,10 @@ export default function BookDetails() {
       return;
     }
     const cartItem = {
-      id: book?.data._id,
-      image: book?.data.image,
-      title: book?.data.title,
-      price: book?.data.price,
+      id: book?.data?._id || "",
+      image: book?.data?.image || "",
+      title: book?.data?.title || "No Title",
+      price: book?.data?.price || 0,
     };
     dispatch(addToCart(cartItem));
   }
@@ -94,7 +94,7 @@ export default function BookDetails() {
               </Text>
               <Text>
                 <span style={{ color: "#62AB00", fontWeight: "bold" }}>
-                  BDT {book?.data.price}
+                  $ {book?.data.price}
                 </span>
               </Text>
               <Text>

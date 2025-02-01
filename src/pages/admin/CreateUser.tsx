@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment } from "react/jsx-runtime";
 import ReusableForm from "../../components/common/ReusableForm";
 import ReusableInput from "../../components/common/ReusableInput";
@@ -16,18 +17,21 @@ export default function CreateUser() {
     const toastId = toast.loading("Creating user account...");
     try {
       // console.log("User Signed Up:", data);
-      const response = await signup(data).unwrap();
+      await signup(data).unwrap();
       toast.success("User account has been created successfully!", {
         id: toastId,
         duration: 2000,
       });
-      console.log(response);
-    } catch (err) {
+      // console.log(response);
+    } catch (err: any) {
       // console.log(err);
-      toast.error(err.message || "Registration failed. Please try again.", {
-        id: toastId,
-        duration: 2000,
-      });
+      toast.error(
+        err.data.message || "Registration failed. Please try again.",
+        {
+          id: toastId,
+          duration: 2000,
+        }
+      );
     }
   };
 

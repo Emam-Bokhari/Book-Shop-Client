@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Card,
   Col,
@@ -88,7 +89,7 @@ export default function OrderDetails() {
         <Col xs={24}>
           <Card title="Ordered Products" bordered>
             <ul style={{ listStyle: "none", padding: 0 }}>
-              {orderData?.data.products.map((product, index) => (
+              {orderData?.data.products.map((product: any, index: any) => (
                 <div key={index}>
                   <li>
                     <strong>Product:</strong> {product?.productId?.title} <br />

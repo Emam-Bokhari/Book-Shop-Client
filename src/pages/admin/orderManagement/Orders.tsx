@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment } from "react";
-import { Button, Col, Row, Select, Space, Table } from "antd";
+import { Fragment, useState } from "react";
+import { Button, Col, Pagination, Row, Select, Space, Table } from "antd";
 import { Link } from "react-router-dom";
 import {
   useGetAllOrdersQuery,
@@ -8,18 +8,50 @@ import {
 } from "../../../features/order/api";
 import moment from "moment-timezone";
 import { toast } from "sonner";
+import { TQueryParam } from "../../../types/global";
+
+export type ShippingAddress = {
+  city: string;
+  country: string;
+};
+
+export type User = {
+  name: string;
+  email: string;
+};
+
+export type OrderItem = {
+  key: string;
+  paymentMethod: string;
+  totalAmount: number;
+  transactionId: string;
+  shippingAddress: string;
+  orderDate: string;
+  status: "pending" | "shipping" | "delivered";
+  userName: string;
+  userEmail: string;
+};
 
 export default function Orders() {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [params, setParams] = useState<TQueryParam[]>([]);
+
   const {
     data: ordersData,
     isFetching,
     refetch,
-  } = useGetAllOrdersQuery(undefined);
+  } = useGetAllOrdersQuery([
+    // { name: "limit", value: 3 },
+    { name: "page", value: currentPage },
+    ...params,
+  ]);
   //   console.log(ordersData);
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
+  console.log(ordersData);
 
   // Function to handle status update
-  const handleOrderStatusUpdate = async (value, id) => {
+  const handleOrderStatusUpdate = async (value: string, id: string) => {
     const toastId = toast.loading("Updating status...");
     try {
       await updateOrderStatus({ id: id, data: { status: value } }).unwrap();
@@ -32,7 +64,8 @@ export default function Orders() {
     }
   };
 
-  const tableData = ordersData?.data.map(
+  // Map the orders data to table-friendly format
+  const tableData: OrderItem[] = ordersData?.data.map(
     ({
       paymentMethod,
       status,
@@ -47,13 +80,15 @@ export default function Orders() {
       paymentMethod,
       totalAmount,
       transactionId,
-      shippingAddress: `${shippingAddressDetails.city}, ${shippingAddressDetails.country}`,
+      shippingAddress: `${shippingAddressDetails?.city}, ${shippingAddressDetails?.country}`,
       orderDate: moment(orderDate).tz("Asia/Dhaka").format("YYYY-MMM-DD"),
       status,
-      userName: userId.name,
-      userEmail: userId.email,
+      userName: userId?.name,
+      userEmail: userId?.email,
     })
   );
+
+  const metaData = ordersData?.meta;
 
   const columns = [
     {
@@ -75,7 +110,7 @@ export default function Orders() {
       title: "Total Amount",
       dataIndex: "totalAmount",
       key: "totalAmount",
-      render: (amount) => `$${amount.toFixed(2)}`,
+      render: (amount: number) => `$${amount.toFixed(2)}`,
     },
     {
       title: "Transaction ID",
@@ -91,7 +126,7 @@ export default function Orders() {
       title: "Order Progress",
       dataIndex: "status",
       key: "status",
-      render: (status, record) => (
+      render: (status: string, record: OrderItem) => (
         <Select
           defaultValue={status}
           style={{ width: 120 }}
@@ -102,7 +137,22 @@ export default function Orders() {
           <Select.Option value="delivered">Delivered</Select.Option>
         </Select>
       ),
+      filters: [
+        {
+          text: "Pending",
+          value: "pending",
+        },
+        {
+          text: "Shipping",
+          value: "shipping",
+        },
+        {
+          text: "Delivered",
+          value: "delivered",
+        },
+      ],
     },
+
     {
       title: "Shipping Address",
       dataIndex: "shippingAddress",
@@ -112,7 +162,7 @@ export default function Orders() {
       title: "Action",
       dataIndex: "",
       key: "x",
-      render: (item) => {
+      render: (item: OrderItem) => {
         return (
           <Space>
             <Link to={`/orders/${item.key}`}>
@@ -124,6 +174,19 @@ export default function Orders() {
       width: "1%",
     },
   ];
+
+  const onChange = (_pagination, filters, _sorter, extra) => {
+    console.log("params", filters, extra);
+    if (extra.action === "filter") {
+      const queryParams: TQueryParam[] = [];
+
+      filters.status?.forEach((item) =>
+        queryParams?.push({ name: "status", value: item })
+      );
+
+      setParams(queryParams);
+    }
+  };
 
   return (
     <Fragment>
@@ -142,7 +205,16 @@ export default function Orders() {
                 pagination={false}
                 scroll={{ x: "max-content" }}
                 loading={isFetching}
+                onChange={onChange}
                 style={{ height: "100%" }}
+              />
+              <Pagination
+                style={{ marginTop: "20px" }}
+                align="end"
+                current={currentPage}
+                onChange={(page) => setCurrentPage(page)}
+                pageSize={metaData?.limit}
+                total={metaData?.total}
               />
             </div>
           </Col>

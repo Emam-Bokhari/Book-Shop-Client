@@ -22,6 +22,10 @@ import ProductDetails from "../pages/admin/productManagement/ProductDetails";
 import UpdateProduct from "../pages/admin/productManagement/UpdateProduct";
 import Orders from "../pages/admin/orderManagement/Orders";
 import OrderDetails from "../pages/admin/orderManagement/OrderDetails";
+import PaymentSuccess from "../pages/PaymentSuccess";
+import PlainLayout from "../components/layout/PlainLayout";
+import PaymentCancel from "../pages/PaymentCancel";
+import PaymentFail from "../pages/PaymentFail";
 
 export const publicRoutes = [
   { path: "/", element: <Home />, layout: DefaultLayout },
@@ -35,6 +39,33 @@ export const publicRoutes = [
       </PrivateRoute>
     ),
     layout: DefaultLayout,
+  },
+  {
+    path: "/payment-success",
+    element: (
+      <PrivateRoute>
+        <PaymentSuccess />
+      </PrivateRoute>
+    ),
+    layout: PlainLayout,
+  },
+  {
+    path: "/payment-cancel",
+    element: (
+      <PrivateRoute>
+        <PaymentCancel />
+      </PrivateRoute>
+    ),
+    layout: PlainLayout,
+  },
+  {
+    path: "/payment-fail",
+    element: (
+      <PrivateRoute>
+        <PaymentFail />
+      </PrivateRoute>
+    ),
+    layout: PlainLayout,
   },
   {
     path: "/order-history",

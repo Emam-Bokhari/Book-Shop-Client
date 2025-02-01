@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Button, Card, Typography, Checkbox, Row, Col } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -9,6 +10,12 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../features/auth/redux/authSlice";
 import { toast } from "sonner";
 
+export type LoginData = {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+};
+
 const { Title } = Typography;
 
 export default function Signin() {
@@ -17,7 +24,7 @@ export default function Signin() {
   const location = useLocation();
   const [login] = useLoginMutation();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: LoginData) => {
     const toastId = toast.loading("Logging in...");
     try {
       const response = await login(data).unwrap();
@@ -29,12 +36,15 @@ export default function Signin() {
       const redirectPath = location.state?.from.pathname || "/";
       // console.log(redirectPath);
       navigate(redirectPath, { replace: true });
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
-      toast.error(err.message || "Login attempt failed. Please try again.", {
-        id: toastId,
-        duration: 2000,
-      });
+      toast.error(
+        err.data.message || "Login attempt failed. Please try again.",
+        {
+          id: toastId,
+          duration: 2000,
+        }
+      );
     }
   };
 

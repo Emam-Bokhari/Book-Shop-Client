@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { baseApi } from "../../redux/api/baseApi";
+import { TQueryParam } from "../../types/global";
 
 const orderApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -22,10 +24,22 @@ const orderApi = baseApi.injectEndpoints({
             }
         }),
         getAllOrders: builder.query({
-            query: () => ({
-                url: "/orders",
-                method: "GET",
-            }),
+            query: (args) => {
+
+                const params = new URLSearchParams();
+
+                if (args) {
+                    args.forEach((item: TQueryParam) => {
+                        params.append(item.name, item.value as string)
+                    })
+                }
+
+                return {
+                    url: "/orders",
+                    method: "GET",
+                    params: params
+                }
+            },
             transformResponse: (response: any) => {
                 return {
                     data: response?.data,

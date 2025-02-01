@@ -1,5 +1,6 @@
 import { baseApi } from "../../redux/api/baseApi";
 import { ApiResponse, TProduct } from "../../types";
+import { TQueryParam } from "../../types/global";
 
 
 const productsApi = baseApi.injectEndpoints({
@@ -13,10 +14,22 @@ const productsApi = baseApi.injectEndpoints({
             invalidatesTags: ["products"]
         }),
         getAllProducts: builder.query({
-            query: () => ({
-                url: "/products",
-                method: "GET",
-            }),
+            query: (args) => {
+
+                const params = new URLSearchParams();
+
+                if (args) {
+                    args.forEach((item: TQueryParam) => {
+                        params.append(item.name, item.value as string)
+                    })
+                }
+
+                return {
+                    url: "/products",
+                    method: "GET",
+                    params: params
+                }
+            },
             providesTags: ["products"],
             transformResponse: (response: ApiResponse<TProduct[]>) => {
                 return {
