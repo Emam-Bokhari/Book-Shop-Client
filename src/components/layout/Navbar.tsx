@@ -17,17 +17,18 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { logout } from "../../features/auth/redux/authSlice";
+import { logout, logoutUser } from "../../features/auth/redux/authSlice";
 import { useMediaQuery } from "react-responsive";
 import logo from "../../assets/logo/Green-Leaf.png";
 import { DashboardOutlined } from "@ant-design/icons";
+import { useAppDispatch } from "../../redux/hook";
 
 const { Title } = Typography;
 
 export default function Navbar() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const cartCount = cartItems.length;
   const user = useSelector((state: RootState) => state.auth.user);
@@ -46,6 +47,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(logoutUser());
   };
 
   const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });

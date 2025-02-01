@@ -10,8 +10,8 @@ const orderApi = baseApi.injectEndpoints({
             })
         }),
         getUserOrderHistory: builder.query({
-            query: () => ({
-                url: "orders/order-history",
+            query: (email) => ({
+                url: `/orders/order-history/${email}`,
                 method: "GET",
             }),
             transformResponse: (response: any) => {
@@ -23,7 +23,7 @@ const orderApi = baseApi.injectEndpoints({
         }),
         getAllOrders: builder.query({
             query: () => ({
-                url: "orders",
+                url: "/orders",
                 method: "GET",
             }),
             transformResponse: (response: any) => {
@@ -33,7 +33,26 @@ const orderApi = baseApi.injectEndpoints({
                 }
             }
         }),
+        getOrder: builder.query({
+            query: (id) => ({
+                url: `/orders/${id}`,
+                method: "GET",
+            }),
+            transformResponse: (response: any) => {
+                return {
+                    data: response?.data,
+                    meta: response?.meta,
+                }
+            }
+        }),
+        updateOrderStatus: builder.mutation({
+            query: (args) => ({
+                url: `/orders/${args.id}/status`,
+                method: "PATCH",
+                body: args.data,
+            }),
+        }),
     })
 })
 
-export const { useAddOrderMutation, useGetUserOrderHistoryQuery, useGetAllOrdersQuery } = orderApi;
+export const { useAddOrderMutation, useGetUserOrderHistoryQuery, useGetAllOrdersQuery, useGetOrderQuery, useUpdateOrderStatusMutation } = orderApi;

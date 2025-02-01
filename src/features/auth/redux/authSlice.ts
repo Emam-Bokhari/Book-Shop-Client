@@ -1,6 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../../redux/store";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { persistor, RootState } from "../../../redux/store";
 import { TUser } from "../../../types/users";
+import { clearCart } from "../../cart/redux/cartSlice";
+
 
 
 
@@ -14,6 +16,12 @@ const initialState: TAuthState = {
     token: null,
 }
 
+export const logoutUser = createAsyncThunk("auth/logoutUser", async (_, { dispatch }) => {
+    dispatch(clearCart());
+    persistor.purge();
+});
+
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -26,6 +34,7 @@ const authSlice = createSlice({
         logout: (state) => {
             state.user = null;
             state.token = null;
+
         }
     }
 })

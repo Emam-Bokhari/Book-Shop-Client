@@ -2,9 +2,14 @@ import { Fragment } from "react";
 import { useGetUserOrderHistoryQuery } from "../features/order/api";
 import { Col, Row, Table, Tag } from "antd";
 import moment from "moment-timezone";
+import { useAppSelector } from "../redux/hook";
+import { selectCurrentUser } from "../features/auth/redux/authSlice";
 
 export default function OrderHistory() {
-  const { data: orderHistoryData } = useGetUserOrderHistoryQuery(undefined);
+  const user = useAppSelector(selectCurrentUser);
+  const email = user?.email;
+  // console.log(email);
+  const { data: orderHistoryData } = useGetUserOrderHistoryQuery(email);
 
   const tableData = orderHistoryData?.data.map(
     ({

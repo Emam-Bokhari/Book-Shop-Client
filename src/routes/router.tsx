@@ -21,6 +21,7 @@ import Products from "../pages/admin/productManagement/Products";
 import ProductDetails from "../pages/admin/productManagement/ProductDetails";
 import UpdateProduct from "../pages/admin/productManagement/UpdateProduct";
 import Orders from "../pages/admin/orderManagement/Orders";
+import OrderDetails from "../pages/admin/orderManagement/OrderDetails";
 
 export const publicRoutes = [
   { path: "/", element: <Home />, layout: DefaultLayout },
@@ -121,6 +122,15 @@ export const publicRoutes = [
     element: (
       <PrivateRoute role="admin">
         <Orders />
+      </PrivateRoute>
+    ),
+    layout: DashboardLayout,
+  },
+  {
+    path: "/orders/:id",
+    element: (
+      <PrivateRoute role="admin">
+        <OrderDetails />
       </PrivateRoute>
     ),
     layout: DashboardLayout,

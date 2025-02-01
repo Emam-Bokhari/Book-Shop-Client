@@ -1,13 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment } from "react";
-import { Button, Col, Row, Space, Table } from "antd";
+import { Button, Col, Row, Select, Space, Table } from "antd";
 import { Link } from "react-router-dom";
-import { useGetAllOrdersQuery } from "../../../features/order/api";
+import {
+  useGetAllOrdersQuery,
+  useUpdateOrderStatusMutation,
+} from "../../../features/order/api";
 import moment from "moment-timezone";
+import { toast } from "sonner";
 
 export default function Orders() {
-  const { data: ordersData, isFetching } = useGetAllOrdersQuery(undefined);
-  console.log(ordersData);
+  const {
+    data: ordersData,
+    isFetching,
+    refetch,
+  } = useGetAllOrdersQuery(undefined);
+  //   console.log(ordersData);
+  const [updateOrderStatus] = useUpdateOrderStatusMutation();
+
+  // Function to handle status update
+  const handleOrderStatusUpdate = async (value, id) => {
+    const toastId = toast.loading("Updating status...");
+    try {
+      await updateOrderStatus({ id: id, data: { status: value } }).unwrap();
+      toast.success("Status has been successfully updated.", { id: toastId });
+      refetch();
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Error updating status.", {
+        id: toastId,
+      });
+    }
+  };
+
   const tableData = ordersData?.data.map(
     ({
       paymentMethod,
@@ -17,8 +41,9 @@ export default function Orders() {
       shippingAddressDetails,
       orderDate,
       userId,
+      _id,
     }) => ({
-      key: transactionId,
+      key: _id,
       paymentMethod,
       totalAmount,
       transactionId,
@@ -66,6 +91,17 @@ export default function Orders() {
       title: "Order Progress",
       dataIndex: "status",
       key: "status",
+      render: (status, record) => (
+        <Select
+          defaultValue={status}
+          style={{ width: 120 }}
+          onChange={(value) => handleOrderStatusUpdate(value, record.key)}
+        >
+          <Select.Option value="pending">Pending</Select.Option>
+          <Select.Option value="shipping">Shipping</Select.Option>
+          <Select.Option value="delivered">Delivered</Select.Option>
+        </Select>
+      ),
     },
     {
       title: "Shipping Address",

@@ -24,6 +24,10 @@ const cartPersistConfig = {
 // persist reducer for cart
 const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer)
 
+
+
+
+
 export const store = configureStore({
     reducer: {
         [baseApi.reducerPath]: baseApi.reducer,
