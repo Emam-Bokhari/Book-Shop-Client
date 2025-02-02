@@ -38,6 +38,12 @@ const productsApi = baseApi.injectEndpoints({
                 }
             }
         }),
+        getProductsNoDefaultPagination: builder.query({
+            query: () => ({
+                url: "/products/all",
+                method: "GET",
+            })
+        }),
         getProduct: builder.query({
             query: (id) => ({
                 url: `/products/${id}`,
@@ -69,4 +75,4 @@ const productsApi = baseApi.injectEndpoints({
     })
 })
 
-export const { useGetAllProductsQuery, useGetProductQuery, useAddProductMutation, useUpdateProductMutation, useDeleteProductMutation } = productsApi;
+export const { useGetAllProductsQuery, useGetProductQuery, useAddProductMutation, useUpdateProductMutation, useDeleteProductMutation, useGetProductsNoDefaultPaginationQuery } = productsApi;

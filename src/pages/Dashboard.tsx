@@ -1,7 +1,7 @@
 import { Fragment } from "react/jsx-runtime";
 import { Card, Col, Row, Spin, Statistic } from "antd";
 import { useGetAllUsersQuery } from "../features/user/api";
-import { useGetAllProductsQuery } from "../features/books/api";
+import { useGetProductsNoDefaultPaginationQuery } from "../features/books/api";
 import { useGetAllOrdersQuery } from "../features/order/api";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { useMediaQuery } from "react-responsive";
@@ -9,21 +9,12 @@ import { useMediaQuery } from "react-responsive";
 export default function Dashboard() {
   const isSmallScreen = useMediaQuery({ maxWidth: 767 });
 
-  const {
-    data: usersData,
-    isLoading: usersLoading,
-    isError: usersError,
-  } = useGetAllUsersQuery(undefined);
-  const {
-    data: productsData,
-    isLoading: productsLoading,
-    isError: productsError,
-  } = useGetAllProductsQuery(undefined);
-  const {
-    data: ordersData,
-    isLoading: ordersLoading,
-    isError: ordersError,
-  } = useGetAllOrdersQuery(undefined);
+  const { data: usersData, isLoading: usersLoading } =
+    useGetAllUsersQuery(undefined);
+  const { data: productsData, isLoading: productsLoading } =
+    useGetProductsNoDefaultPaginationQuery(undefined);
+  const { data: ordersData, isLoading: ordersLoading } =
+    useGetAllOrdersQuery(undefined);
 
   if (usersLoading || productsLoading || ordersLoading) {
     return (
@@ -33,19 +24,9 @@ export default function Dashboard() {
     );
   }
 
-  if (usersError || productsError || ordersError) {
-    return (
-      <div style={{ textAlign: "center", marginTop: "50px" }}>
-        <p style={{ color: "red" }}>
-          There was an error fetching the data. Please try again later.
-        </p>
-      </div>
-    );
-  }
-
-  const totalProducts = productsData?.data?.length || 0;
-  const totalOrders = ordersData?.data?.length || 0;
-  const totalUsers = usersData?.data?.length || 0;
+  const totalProducts = productsData?.data?.length ?? 0;
+  const totalOrders = ordersData?.data?.length ?? 0;
+  const totalUsers = usersData?.data?.length ?? 0;
 
   const pieData = [
     { name: "Products", value: totalProducts },

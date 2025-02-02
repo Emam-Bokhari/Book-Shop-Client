@@ -4,7 +4,7 @@ import FilterSidebar from "../features/books/components/FilterSidebar";
 import Sort from "../features/books/components/Sort";
 import BookCard from "../components/common/BookCard";
 import { useMediaQuery } from "react-responsive";
-import { useGetAllProductsQuery } from "../features/books/api";
+import { useGetProductsNoDefaultPaginationQuery } from "../features/books/api";
 import BookCardSkeleton from "../components/skeleton/BookCardSkeleton";
 import { useState } from "react";
 
@@ -13,7 +13,8 @@ const { useToken } = theme;
 export default function Books() {
   const { token } = useToken();
   const isSmallScreen = useMediaQuery({ maxWidth: 992 });
-  const { data: booksData, isFetching } = useGetAllProductsQuery(undefined);
+  const { data: booksData, isFetching } =
+    useGetProductsNoDefaultPaginationQuery(undefined);
   const skeletonArray = Array.from({ length: 8 });
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -46,8 +47,11 @@ export default function Books() {
 
   const totalBooks = sortedBooks.length;
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalBooks);
   const paginatedBooks = sortedBooks.slice(startIndex, endIndex);
+  // console.log(paginatedBooks);
+  // console.log(startIndex);
+  // console.log(endIndex);
 
   const handleSortChange = (value) => {
     setSortOrder(value);
@@ -130,10 +134,15 @@ export default function Books() {
             current={currentPage}
             pageSize={pageSize}
             total={totalBooks}
-            onChange={(page) => setCurrentPage(page)}
-            showSizeChanger={false}
-            style={{ marginTop: "20px" }}
-            align="end"
+            onChange={(page) => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
           />
         </Col>
       </Row>
