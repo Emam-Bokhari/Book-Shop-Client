@@ -22,6 +22,10 @@ export default function BookCard({
 }: BookCardProps) {
   const { token } = useToken();
 
+  function truncateTitle(title: string) {
+    return title.length > 25 ? title.slice(0, 25) + "..." : title;
+  }
+
   return (
     <Link to={`/books/${id}`} style={{ cursor: "pointer" }}>
       <Card
@@ -48,7 +52,7 @@ export default function BookCard({
       >
         <div style={{ textAlign: "center" }}>
           <Title level={5} style={{ color: token.colorTextSecondary }}>
-            {title}
+            {truncateTitle(title)}
           </Title>
           <Paragraph style={{ color: "#62AB00", fontWeight: "bold" }}>
             $ &nbsp;{price}
