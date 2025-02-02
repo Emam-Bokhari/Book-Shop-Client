@@ -1,10 +1,11 @@
-import { Col, Row, theme, Typography } from "antd";
+import { Button, Col, Row, theme, Typography } from "antd";
 import { Fragment } from "react/jsx-runtime";
 import BookCard from "../../../components/common/BookCard";
 import BookCardSkeleton from "../../../components/skeleton/BookCardSkeleton";
 import { useGetAllProductsQuery } from "../../books/api";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../cart/redux/cartSlice";
+import { Link } from "react-router-dom";
 
 const { Title, Paragraph } = Typography;
 
@@ -64,6 +65,19 @@ export default function FeaturedCollection() {
           stories to timeless masterpieces, dive into a world of books that
           captivate and inspire.
         </Paragraph>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: "10px",
+            marginRight: "20px",
+          }}
+        >
+          <Link to="/books">
+            <Button type="primary">View All</Button>
+          </Link>
+        </div>
         <Row
           gutter={[16, 16]}
           justify="start"
@@ -85,7 +99,7 @@ export default function FeaturedCollection() {
                   <BookCardSkeleton />
                 </Col>
               ))
-            : booksData?.data?.map((book, _id) => (
+            : booksData?.data?.slice(0, 8)?.map((book, _id) => (
                 <Col
                   xs={24}
                   sm={12}
