@@ -18,6 +18,7 @@ export default function Books() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All Categories");
+  const [inStockFilter, setInStockFilter] = useState(false);
 
   const filteredBooks =
     booksData?.data?.filter(
@@ -26,7 +27,8 @@ export default function Books() {
           book[key]?.toLowerCase()?.includes(searchQuery.toLowerCase())
         ) &&
         (categoryFilter === "All Categories" ||
-          book.category === categoryFilter)
+          book.category === categoryFilter) &&
+        (!inStockFilter || book.quantity > 0)
     ) || [];
 
   return (
@@ -44,6 +46,8 @@ export default function Books() {
           <FilterSidebar
             categoryFilter={categoryFilter}
             setCategoryFilter={setCategoryFilter}
+            inStockFilter={inStockFilter}
+            setInStockFilter={setInStockFilter}
           />
         </Col>
 

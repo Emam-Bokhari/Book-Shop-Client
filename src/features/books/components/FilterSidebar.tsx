@@ -4,7 +4,12 @@ const { Title } = Typography;
 
 const { useToken } = theme;
 
-export default function FilterSidebar({ categoryFilter, setCategoryFilter }) {
+export default function FilterSidebar({
+  categoryFilter,
+  setCategoryFilter,
+  inStockFilter,
+  setInStockFilter,
+}) {
   const { token } = useToken();
   const [selectedCategory, setSelectedCategory] = useState(categoryFilter);
 
@@ -12,6 +17,11 @@ export default function FilterSidebar({ categoryFilter, setCategoryFilter }) {
     setSelectedCategory(value);
     setCategoryFilter(value);
   };
+
+  const handleStockChange = (e) => {
+    setInStockFilter(e.target.checked);
+  };
+
   return (
     <div
       style={{
@@ -53,7 +63,11 @@ export default function FilterSidebar({ categoryFilter, setCategoryFilter }) {
 
       {/* in stock filter */}
       <div style={{ marginTop: "20px" }}>
-        <Checkbox style={{ color: token.colorTextSecondary }}>
+        <Checkbox
+          style={{ color: token.colorTextSecondary }}
+          checked={inStockFilter}
+          onChange={handleStockChange}
+        >
           In Stock
         </Checkbox>
       </div>
