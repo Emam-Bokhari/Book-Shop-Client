@@ -19,8 +19,9 @@ export default function Books() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All Categories");
   const [inStockFilter, setInStockFilter] = useState(false);
-  const [priceRangeFilter, setPriceRangeFilter] = useState<number[]>([0, 100]);
+  const [priceRangeFilter, setPriceRangeFilter] = useState<number[]>([0, 3000]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState("None");
   const pageSize = 10;
 
   const filteredBooks =
@@ -36,10 +37,21 @@ export default function Books() {
         book.price <= priceRangeFilter[1]
     ) || [];
 
-  const totalBooks = filteredBooks.length;
+  const sortedBooks =
+    sortOrder === "asc"
+      ? [...filteredBooks].sort((a, b) => a.price - b.price)
+      : sortOrder === "desc"
+      ? [...filteredBooks].sort((a, b) => b.price - a.price)
+      : filteredBooks;
+
+  const totalBooks = sortedBooks.length;
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
-  const paginatedBooks = filteredBooks.slice(startIndex, endIndex);
+  const paginatedBooks = sortedBooks.slice(startIndex, endIndex);
+
+  const handleSortChange = (value) => {
+    setSortOrder(value);
+  };
 
   return (
     <Fragment>
@@ -80,7 +92,7 @@ export default function Books() {
               style={{ width: isSmallScreen ? "100%" : "60%" }}
             />
             {/* Hide Sort on small screens */}
-            {!isSmallScreen && <Sort />}
+            {!isSmallScreen && <Sort onSortChange={handleSortChange} />}
           </div>
 
           {/* Books Grid */}
