@@ -17,12 +17,16 @@ export default function Books() {
   const skeletonArray = Array.from({ length: 8 });
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All Categories");
 
   const filteredBooks =
-    booksData?.data?.filter((book) =>
-      ["title", "author", "category"].some((key) =>
-        book[key]?.toLowerCase()?.includes(searchQuery.toLowerCase())
-      )
+    booksData?.data?.filter(
+      (book) =>
+        ["title", "author", "category"].some((key) =>
+          book[key]?.toLowerCase()?.includes(searchQuery.toLowerCase())
+        ) &&
+        (categoryFilter === "All Categories" ||
+          book.category === categoryFilter)
     ) || [];
 
   return (
@@ -37,7 +41,10 @@ export default function Books() {
       >
         {/* Left Sidebar (Filters) */}
         <Col xs={24} md={6}>
-          <FilterSidebar />
+          <FilterSidebar
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter}
+          />
         </Col>
 
         {/* Books Display */}

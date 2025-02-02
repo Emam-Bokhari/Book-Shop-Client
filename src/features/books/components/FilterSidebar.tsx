@@ -1,10 +1,17 @@
 import { Checkbox, Select, Slider, theme, Typography } from "antd";
+import { useState } from "react";
 const { Title } = Typography;
 
 const { useToken } = theme;
 
-export default function FilterSidebar() {
+export default function FilterSidebar({ categoryFilter, setCategoryFilter }) {
   const { token } = useToken();
+  const [selectedCategory, setSelectedCategory] = useState(categoryFilter);
+
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+    setCategoryFilter(value);
+  };
   return (
     <div
       style={{
@@ -25,11 +32,25 @@ export default function FilterSidebar() {
         <Title level={5} style={{ color: token.colorTextSecondary }}>
           Category
         </Title>
-        <Select size="large" style={{ width: "100%" }} defaultValue="None">
+        <Select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          size="large"
+          style={{ width: "100%" }}
+          defaultValue="None"
+        >
+          <Select.Option value="All Categories">All Categories</Select.Option>
           <Select.Option value="fiction">Fiction</Select.Option>
           <Select.Option value="non-fiction">Non-Fiction</Select.Option>
+          <Select.Option value="academic">Academic</Select.Option>
+          <Select.Option value="philosophy">Philosophy</Select.Option>
+          <Select.Option value="children">Children</Select.Option>
+          <Select.Option value="science">Science</Select.Option>
+          <Select.Option value="religion">Religion</Select.Option>
+          <Select.Option value="history">History</Select.Option>
         </Select>
       </div>
+
       {/* in stock filter */}
       <div style={{ marginTop: "20px" }}>
         <Checkbox style={{ color: token.colorTextSecondary }}>
