@@ -26,7 +26,7 @@ const { useToken } = theme;
 export default function Testimonial() {
   const { token } = useToken();
   return (
-    <div style={{ maxWidth: "1200px", margin: "auto" }}>
+    <div style={{ maxWidth: "1200px", margin: "auto", padding: "12px" }}>
       <Title
         level={2}
         style={{
@@ -73,7 +73,9 @@ export default function Testimonial() {
                   }}
                 />
               </div>
-              <Title level={4}>{testimonial.name}</Title>
+              <Title style={{ color: "#62AB00" }} level={4}>
+                {testimonial.name}
+              </Title>
               <Paragraph
                 style={{
                   color: "#888",
