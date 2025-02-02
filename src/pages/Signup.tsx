@@ -17,16 +17,13 @@ export default function Signup() {
   const onSubmit = async (data: TSignUp) => {
     const toastId = toast.loading("Creating your account...");
     try {
-      // console.log("User Signed Up:", data);
       await signup(data).unwrap();
       toast.success("Your account has been created successfully!", {
         id: toastId,
         duration: 2000,
       });
-      navigate("/");
-      // console.log(response);
+      navigate("/signin");
     } catch (err: any) {
-      // console.log(err);
       toast.error(
         err.data.message || "Registration failed. Please try again.",
         {

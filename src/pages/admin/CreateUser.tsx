@@ -16,15 +16,12 @@ export default function CreateUser() {
   const onSubmit = async (data: TSignUp) => {
     const toastId = toast.loading("Creating user account...");
     try {
-      // console.log("User Signed Up:", data);
       await signup(data).unwrap();
       toast.success("User account has been created successfully!", {
         id: toastId,
         duration: 2000,
       });
-      // console.log(response);
     } catch (err: any) {
-      // console.log(err);
       toast.error(
         err.data.message || "Registration failed. Please try again.",
         {
@@ -51,6 +48,11 @@ export default function CreateUser() {
         >
           <ReusableForm onSubmit={onSubmit}>
             <ReusableInput
+              label={
+                <span>
+                  Name <span style={{ color: "red" }}>*</span>
+                </span>
+              }
               type="text"
               name="name"
               placeholder="Enter Your Name"
@@ -59,6 +61,11 @@ export default function CreateUser() {
             />
             <ReusableInput
               type="email"
+              label={
+                <span>
+                  Email <span style={{ color: "red" }}>*</span>
+                </span>
+              }
               name="email"
               placeholder="Enter Your Email"
               rules={[{ required: true, message: "Please enter your email" }]}
@@ -67,6 +74,11 @@ export default function CreateUser() {
             <ReusableInput
               type="password"
               name="password"
+              label={
+                <span>
+                  Password <span style={{ color: "red" }}>*</span>
+                </span>
+              }
               placeholder="Password"
               rules={[
                 { required: true, message: "Please enter your password!" },

@@ -15,7 +15,6 @@ export default function Profile() {
   const { token } = useToken();
 
   const user = useSelector(selectCurrentUser);
-  console.log(user);
 
   return (
     <div
@@ -38,9 +37,8 @@ export default function Profile() {
         Profile Settings
       </h2>
 
-      {/* Layout for Profile Settings - Split into two parts */}
       <Row gutter={32}>
-        {/* Left side: Role, Email, Change Button */}
+        {/* Role, Email, Change Button */}
         <Col xs={24} sm={12} lg={12}>
           <div
             style={{
@@ -76,15 +74,11 @@ export default function Profile() {
                   style={{ width: "100%", marginBottom: "10px" }}
                 />
               </Form.Item>
-
-              {/* <Form.Item>
-                <Button type="primary">Change Information</Button>
-              </Form.Item> */}
             </Form>
           </div>
         </Col>
 
-        {/* Right side: Profile Image, Password, Preferences (read-only UI) */}
+        {/* Profile Image, Password, Preferences  */}
         <Col xs={24} sm={12} lg={12}>
           <div
             style={{

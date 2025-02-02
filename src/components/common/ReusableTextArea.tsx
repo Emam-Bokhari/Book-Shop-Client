@@ -1,9 +1,10 @@
 import { Form, Input } from "antd";
+import { ReactNode } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 type TReusableTextAreaProps = {
   name: string;
-  label?: string;
+  label?: ReactNode;
   placeholder?: string;
   rules?: Array<{ required: boolean; message: string }>;
   rows?: number;

@@ -28,13 +28,10 @@ export default function Signin() {
     const toastId = toast.loading("Logging in...");
     try {
       const response = await login(data).unwrap();
-      // console.log(response);
       const user = verifyToken(response.data.token);
       dispatch(setUser({ user: user, token: response.data }));
       toast.success("Login successful", { id: toastId, duration: 2000 });
-      // console.log("User Signed In:", user);
       const redirectPath = location.state?.from.pathname || "/";
-      // console.log(redirectPath);
       navigate(redirectPath, { replace: true });
     } catch (err: any) {
       console.log(err);

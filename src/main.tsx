@@ -16,8 +16,6 @@ createRoot(document.getElementById("root")!).render(
         <ConfigProvider
           theme={{
             token: {
-              // globally
-              // colorPrimaryBg: "#FAF4F1",
               colorPrimary: "#62AB00",
               colorText: "#110E17",
               fontSizeHeading1: 40,
@@ -27,7 +25,6 @@ createRoot(document.getElementById("root")!).render(
               fontFamily: "Poppins",
               fontSize: 16,
             },
-            // component wise
             components: {
               Typography: {
                 // fontSize: 16,

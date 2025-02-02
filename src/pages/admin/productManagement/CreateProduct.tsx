@@ -42,7 +42,7 @@ const languageOptions = [
 
 const formatOptions = ["hardcover", "paperback", "eBook", "audioBook"].map(
   (item) => ({
-    label: item.charAt(0).toUpperCase() + item.slice(1),
+    label: item?.charAt(0)?.toUpperCase() + item?.slice(1),
     value: item,
   })
 );
@@ -57,10 +57,10 @@ export default function CreateProduct() {
 
     const formattedData = {
       ...data,
-      price: Number(data.price),
-      pages: Number(data.pages),
-      rating: Number(data.rating),
-      quantity: Number(data.quantity),
+      price: Number(data?.price),
+      pages: Number(data?.pages),
+      rating: Number(data?.rating),
+      quantity: Number(data?.quantity),
     };
 
     try {
@@ -96,7 +96,11 @@ export default function CreateProduct() {
                 <ReusableInput
                   type="text"
                   name="title"
-                  label="Title"
+                  label={
+                    <span>
+                      Title <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   placeholder="Enter Book Title Name"
                   rules={[
                     { required: true, message: "Please enter book title name" },
@@ -105,7 +109,11 @@ export default function CreateProduct() {
               </Col>
               <Col xs={24} sm={12}>
                 <ReusableTextArea
-                  label="Description"
+                  label={
+                    <span>
+                      Description <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   name="description"
                   placeholder="Enter Book Description"
                   rules={[
@@ -118,7 +126,11 @@ export default function CreateProduct() {
               </Col>
               <Col xs={24} sm={12}>
                 <ReusableSelect
-                  label="Category"
+                  label={
+                    <span>
+                      Category <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   name="category"
                   options={categoryOptions}
                 />
@@ -126,7 +138,11 @@ export default function CreateProduct() {
               <Col xs={24} sm={12}>
                 <ReusableInput
                   type="text"
-                  label="Author"
+                  label={
+                    <span>
+                      Author <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   name="author"
                   placeholder="Enter Book Author Name"
                   rules={[
@@ -140,7 +156,11 @@ export default function CreateProduct() {
               <Col xs={24} sm={12}>
                 <ReusableInput
                   type="text"
-                  label="Price"
+                  label={
+                    <span>
+                      Price <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   name="price"
                   placeholder="Enter Book Price"
                   rules={[
@@ -152,7 +172,11 @@ export default function CreateProduct() {
                 <ReusableInput
                   type="text"
                   name="image"
-                  label="Image Url Link"
+                  label={
+                    <span>
+                      Image Url <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   placeholder="Enter Book Image Url Link"
                   rules={[
                     {
@@ -165,7 +189,11 @@ export default function CreateProduct() {
               <Col xs={24} sm={12}>
                 <ReusableInput
                   type="text"
-                  label="Publisher"
+                  label={
+                    <span>
+                      Publisher <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   name="publisher"
                   placeholder="Enter Book Publisher"
                   rules={[
@@ -176,7 +204,11 @@ export default function CreateProduct() {
               <Col xs={24} sm={12}>
                 <ReusableDatePicker
                   name="publishedDate"
-                  label="Published Date"
+                  label={
+                    <span>
+                      Published Date <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                 />
               </Col>
               <Col xs={24} sm={12}>
@@ -185,14 +217,15 @@ export default function CreateProduct() {
                   label="Edition"
                   name="edition"
                   placeholder="Enter Book Edition"
-                  rules={[
-                    { required: true, message: "Please enter book edition" },
-                  ]}
                 />
               </Col>
               <Col xs={24} sm={12}>
                 <ReusableSelect
-                  label="Language"
+                  label={
+                    <span>
+                      Language <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   name="language"
                   options={languageOptions}
                 />
@@ -209,7 +242,11 @@ export default function CreateProduct() {
               <Col xs={24} sm={12}>
                 <ReusableInput
                   type="text"
-                  label="Rating"
+                  label={
+                    <span>
+                      Rating <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   name="rating"
                   placeholder="Enter Rating"
                   rules={[{ required: true, message: "Please enter rating" }]}
@@ -217,7 +254,11 @@ export default function CreateProduct() {
               </Col>
               <Col xs={24} sm={12}>
                 <ReusableSelect
-                  label="Format"
+                  label={
+                    <span>
+                      Format <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   name="format"
                   options={formatOptions}
                 />
@@ -225,7 +266,11 @@ export default function CreateProduct() {
               <Col xs={24} sm={12}>
                 <ReusableInput
                   type="text"
-                  label="Quantity"
+                  label={
+                    <span>
+                      Quantity <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   name="quantity"
                   placeholder="Enter Quantity"
                   rules={[{ required: true, message: "Please enter quantity" }]}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Input, InputNumber } from "antd";
 import { ReactNode } from "react";
 import { Controller, useFormContext } from "react-hook-form";
@@ -5,7 +6,7 @@ import { Controller, useFormContext } from "react-hook-form";
 type TReusableInputProps = {
   type: string;
   name: string;
-  label?: string;
+  label?: ReactNode;
   icon?: ReactNode;
   placeholder?: string;
   defaultValue?: string | number;

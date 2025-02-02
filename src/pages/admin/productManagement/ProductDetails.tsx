@@ -17,7 +17,7 @@ export default function ProductDetails() {
     return (
       <div>
         <Row gutter={[16, 16]}>
-          {/* Skeleton Loader for Image */}
+          {/* Skeleton  */}
           <Col xs={24} sm={12} md={8}>
             <div
               style={{
@@ -41,7 +41,6 @@ export default function ProductDetails() {
             </div>
           </Col>
 
-          {/* Skeleton Loader for Product Details */}
           <Col xs={24} sm={12} md={16}>
             <Card loading={true} bordered={false} style={{ height: "100%" }}>
               <Skeleton active paragraph={{ rows: 12 }} />
@@ -52,12 +51,11 @@ export default function ProductDetails() {
     );
   }
 
-  if (!productData || !productData.data) {
+  if (!productData || !productData?.data) {
     return <div>Product not found.</div>;
   }
 
-  // Access product data from productData.data
-  const product = productData.data as TProduct;
+  const product = productData?.data as TProduct;
 
   return (
     <Fragment>
@@ -87,7 +85,7 @@ export default function ProductDetails() {
               bordered={false}
               style={{ height: "100%" }}
             >
-              {/* Descriptions with inline styles */}
+              {/* Descriptions  */}
               <div
                 style={{
                   display: "flex",
@@ -213,8 +211,8 @@ export default function ProductDetails() {
                   <span style={{ flexBasis: "55%" }}>
                     {" "}
                     {product?.format
-                      ? product?.format.charAt(0).toUpperCase() +
-                        product?.format.slice(1)
+                      ? product?.format?.charAt(0)?.toUpperCase() +
+                        product?.format?.slice(1)
                       : ""}
                   </span>
                 </div>

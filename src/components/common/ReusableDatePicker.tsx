@@ -1,10 +1,11 @@
 import { DatePicker, Form } from "antd";
 import moment, { Moment } from "moment";
+import { ReactNode } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 type TDatePickerProps = {
   name: string;
-  label?: string;
+  label?: ReactNode;
   defaultValue?: string;
 };
 
