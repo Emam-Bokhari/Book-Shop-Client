@@ -69,16 +69,16 @@ export default function OrderDetails() {
           <Card title="Shipping Information" bordered>
             <Descriptions bordered column={1}>
               <Descriptions.Item label="Name">
-                {orderData?.data.shippingAddressDetails?.name}
+                {orderData?.data?.shippingAddressDetails?.name}
               </Descriptions.Item>
               <Descriptions.Item label="Phone">
-                {orderData?.data.shippingAddressDetails?.phone}
+                {orderData?.data?.shippingAddressDetails?.phone}
               </Descriptions.Item>
               <Descriptions.Item label="Address">
-                {orderData?.data.shippingAddressDetails?.address}
+                {orderData?.data?.shippingAddressDetails?.address}
               </Descriptions.Item>
               <Descriptions.Item label="Postal Code">
-                {orderData?.data.shippingAddressDetails?.postalCode}
+                {orderData?.data?.shippingAddressDetails?.postalCode}
               </Descriptions.Item>
             </Descriptions>
           </Card>

@@ -1,8 +1,9 @@
 import { Form, Select } from "antd";
+import { ReactNode } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 type TPHSelectProps = {
-  label: string;
+  label: ReactNode;
   name: string;
   options?: { value: string; label: string; disabled?: boolean }[] | undefined;
   defaultValue?: string;

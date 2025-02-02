@@ -34,11 +34,7 @@ export interface OrderRequest {
 export default function ShoppingCart() {
   const shoppingCartData = useSelector((state: RootState) => state.cart.items);
   const dispatch = useDispatch();
-  // const token = useSelector((state: RootState) => state.auth.token);
   const [order] = useAddOrderMutation();
-
-  // console.log("Authorization header:", `${token.token}`);
-  // console.log(token.token);
 
   const tableData = shoppingCartData?.map(
     ({ id, title, image, price, quantity }: CartItem) => ({
@@ -51,13 +47,11 @@ export default function ShoppingCart() {
     })
   );
 
-  //  Calculate total products (sum of quantities)
   const totalProducts = shoppingCartData.reduce(
     (acc, item) => acc + item.quantity,
     0
   );
 
-  // calculate subtotal (sum of all total prices)
   const subtotal = shoppingCartData.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -121,7 +115,7 @@ export default function ShoppingCart() {
       };
 
       const response = await order(orderData).unwrap();
-      const paymentUrl = response.data.paymentUrl;
+      const paymentUrl = response?.data?.paymentUrl;
 
       // Clear cart from localStorage and Redux store
       localStorage.removeItem("cart");
@@ -131,14 +125,11 @@ export default function ShoppingCart() {
       window.location.href = paymentUrl;
 
       toast.success("Order placed successfully!", { id: toastId });
-
-      // console.log("order data", orderData);
     } catch (err: any) {
       toast.error(
-        err.data.message || "Error while processing order.Please try again",
+        err?.data?.message || "Error while processing order.Please try again",
         { id: toastId }
       );
-      // console.log(err);
     }
   };
 
@@ -173,53 +164,174 @@ export default function ShoppingCart() {
 
           <Card title="Shipping Address" style={{ textAlign: "center" }}>
             <ReusableForm onSubmit={onSubmit}>
-              <ReusableInput
-                type="text"
-                name="name"
-                placeholder="Enter Your Name"
-                rules={[{ required: true, message: "Please enter your name" }]}
-              />
-              <ReusableInput
-                type="text"
-                name="phone"
-                placeholder="Enter You Contact Number"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter your contact number",
-                  },
-                ]}
-              />
-              <ReusableInput
-                type="text"
-                name="address"
-                placeholder="Enter Your Address"
-                rules={[
-                  { required: true, message: "Please enter your address" },
-                ]}
-              />
-              <ReusableInput
-                type="text"
-                name="postalCode"
-                placeholder="Enter Your Postal Code"
-                rules={[
-                  { required: true, message: "Please enter your postal code" },
-                ]}
-              />
-              <ReusableInput
-                type="text"
-                name="city"
-                placeholder="Enter Your City"
-                rules={[{ required: true, message: "Please enter your city" }]}
-              />
-              <ReusableInput
-                type="text"
-                name="country"
-                placeholder="Enter Your Country"
-                rules={[
-                  { required: true, message: "Please enter your country" },
-                ]}
-              />
+              <span
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-15px",
+                    right: "-0px",
+                    color: "red",
+                    fontSize: "16px",
+                  }}
+                >
+                  *
+                </span>
+                <ReusableInput
+                  type="text"
+                  name="name"
+                  placeholder="Enter Your Name"
+                  rules={[
+                    { required: true, message: "Please enter your name" },
+                  ]}
+                />
+              </span>
+              <span
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-15px",
+                    right: "-0px",
+                    color: "red",
+                    fontSize: "16px",
+                  }}
+                >
+                  *
+                </span>
+                <ReusableInput
+                  type="text"
+                  name="phone"
+                  placeholder="Enter You Contact Number"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your contact number",
+                    },
+                  ]}
+                />
+              </span>
+              <span
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-15px",
+                    right: "-0px",
+                    color: "red",
+                    fontSize: "16px",
+                  }}
+                >
+                  *
+                </span>
+                <ReusableInput
+                  type="text"
+                  name="address"
+                  placeholder="Enter Your Address"
+                  rules={[
+                    { required: true, message: "Please enter your address" },
+                  ]}
+                />
+              </span>
+              <span
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-15px",
+                    right: "-0px",
+                    color: "red",
+                    fontSize: "16px",
+                  }}
+                >
+                  *
+                </span>
+                <ReusableInput
+                  type="text"
+                  name="postalCode"
+                  placeholder="Enter Your Postal Code"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your postal code",
+                    },
+                  ]}
+                />
+              </span>
+              <span
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-15px",
+                    right: "-0px",
+                    color: "red",
+                    fontSize: "16px",
+                  }}
+                >
+                  *
+                </span>
+                <ReusableInput
+                  type="text"
+                  name="city"
+                  placeholder="Enter Your City"
+                  rules={[
+                    { required: true, message: "Please enter your city" },
+                  ]}
+                />
+              </span>
+              <span
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "-15px",
+                    right: "-0px",
+                    color: "red",
+                    fontSize: "16px",
+                  }}
+                >
+                  *
+                </span>
+                <ReusableInput
+                  type="text"
+                  name="country"
+                  placeholder="Enter Your Country"
+                  rules={[
+                    { required: true, message: "Please enter your country" },
+                  ]}
+                />
+              </span>
               <Button
                 htmlType="submit"
                 type="primary"

@@ -3,9 +3,6 @@ import { persistor, RootState } from "../../../redux/store";
 import { TUser } from "../../../types/users";
 import { clearCart } from "../../cart/redux/cartSlice";
 
-
-
-
 type TAuthState = {
     user: null | TUser;
     token: null | string;

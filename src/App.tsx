@@ -6,7 +6,6 @@ export default function App() {
   return (
     <Fragment>
       <Routes>
-        {/* public routes */}
         {publicRoutes.map(({ path, element, layout: Layout }, index) => (
           <Route
             key={index}

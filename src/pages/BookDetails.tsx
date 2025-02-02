@@ -68,8 +68,8 @@ export default function BookDetails() {
           <Col xs={24} md={10} lg={8} style={{ textAlign: "center" }}>
             <Image
               preview={false}
-              src={book?.data.image}
-              alt={book?.data.title}
+              src={book?.data?.image}
+              alt={book?.data?.title}
               style={{ width: "100%", borderRadius: "6px" }}
             />
           </Col>
@@ -79,7 +79,7 @@ export default function BookDetails() {
                 level={2}
                 style={{ marginBottom: 0, textTransform: "capitalize" }}
               >
-                {book?.data.title}
+                {book?.data?.title}
               </Title>
               <Text>
                 by{" "}
@@ -89,12 +89,12 @@ export default function BookDetails() {
                     textTransform: "capitalize",
                   }}
                 >
-                  {book?.data.author}
+                  {book?.data?.author}
                 </span>
               </Text>
               <Text>
                 <span style={{ color: "#62AB00", fontWeight: "bold" }}>
-                  $ {book?.data.price}
+                  $ {book?.data?.price}
                 </span>
               </Text>
               <Text>
@@ -106,7 +106,7 @@ export default function BookDetails() {
                   }}
                 >
                   {" "}
-                  {book?.data.category}
+                  {book?.data?.category}
                 </span>
               </Text>
               <Text>
@@ -118,7 +118,7 @@ export default function BookDetails() {
                   }}
                 >
                   {" "}
-                  {book?.data.publisher}
+                  {book?.data?.publisher}
                 </span>
               </Text>
               <Text>
@@ -160,7 +160,7 @@ export default function BookDetails() {
               <Text>
                 <strong>Pages:</strong>{" "}
                 <span style={{ color: token.colorTextSecondary }}>
-                  {book?.data.pages}
+                  {book?.data?.pages}
                 </span>
               </Text>
               <Text>
@@ -171,12 +171,12 @@ export default function BookDetails() {
                     textTransform: "capitalize",
                   }}
                 >
-                  {book?.data.format}
+                  {book?.data?.format}
                 </span>
               </Text>
               <Rate
                 disabled
-                value={book?.data.rating}
+                value={book?.data?.rating}
                 style={{ fontSize: "18px" }}
               />
               <Space style={{ marginTop: "20px" }}>

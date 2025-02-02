@@ -1,4 +1,4 @@
-import { Menu, Layout } from "antd";
+import { Menu, Layout, Button } from "antd";
 import { Fragment } from "react/jsx-runtime";
 import {
   AppstoreAddOutlined,
@@ -10,10 +10,11 @@ import {
   UserOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import { useAppDispatch } from "../../redux/hook";
+import { logout, logoutUser } from "../../features/auth/redux/authSlice";
 
 const { Sider } = Layout;
 
@@ -67,9 +68,14 @@ const menuItems = [
 ];
 
 export default function Sidebar() {
+  const dispatch = useAppDispatch();
   const [collapsed, setCollapsed] = useState(false);
   const isSmallScreen = useMediaQuery({ maxWidth: 576 });
 
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(logoutUser());
+  };
   return (
     <Fragment>
       <Sider
@@ -114,17 +120,19 @@ export default function Sidebar() {
           items={menuItems}
           inlineCollapsed={collapsed}
         />
-        {/* Logout option at the bottom */}
+        {/* Logout  */}
         <div
           style={{
             position: "absolute",
-            top: isSmallScreen ? "85vh" : "87vh",
+            top: isSmallScreen ? "85vh" : "88vh",
             width: "100%",
           }}
         >
           <Menu theme="dark" mode="inline">
             <Menu.Item key="logout" icon={<LogoutOutlined />}>
-              <Link to="/logout">Logout</Link>
+              <Button onClick={handleLogout} type="primary">
+                Logout
+              </Button>
             </Menu.Item>
           </Menu>
         </div>

@@ -16,10 +16,10 @@ export default function ReusableForm<T extends FieldValues>({
   children,
   onSubmit,
 }: TReusableFormProps<T>) {
-  const methods = useForm<T>(); // Initialize before using it
+  const methods = useForm<T>();
   const submit: SubmitHandler<T> = (data) => {
     onSubmit(data);
-    methods.reset(); // Reset after successful submission
+    methods.reset();
   };
 
   return (

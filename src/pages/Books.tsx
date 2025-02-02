@@ -95,11 +95,11 @@ export default function Books() {
               ? paginatedBooks.map((book) => (
                   <Col xs={24} sm={12} md={12} lg={8} xxl={6} key={book._id}>
                     <BookCard
-                      id={book._id}
-                      title={book.title}
-                      image={book.image}
-                      price={book.price}
-                      rating={book.rating}
+                      id={book?._id}
+                      title={book?.title}
+                      image={book?.image}
+                      price={book?.price}
+                      rating={book?.rating}
                     />
                   </Col>
                 ))

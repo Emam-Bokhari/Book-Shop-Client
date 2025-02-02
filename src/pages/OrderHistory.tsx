@@ -42,7 +42,6 @@ export interface OrderHistoryItem {
 export default function OrderHistory() {
   const user = useAppSelector(selectCurrentUser);
   const email = user?.email;
-  // console.log(email);
 
   const { data: orderHistoryData, isFetching } =
     useGetUserOrderHistoryQuery(email);
@@ -62,14 +61,13 @@ export default function OrderHistory() {
         paymentMethod,
         totalAmount,
         transactionId,
-        shippingAddress: `${shippingAddressDetails.city}, ${shippingAddressDetails.country}`,
+        shippingAddress: `${shippingAddressDetails?.city}, ${shippingAddressDetails?.country}`,
         orderDate: moment(orderDate).tz("Asia/Dhaka").format("YYYY-MMM-DD"),
         status,
-        userName: userId.name,
-        userEmail: userId.email,
+        userName: userId?.name,
+        userEmail: userId?.email,
       })
     ) || [];
-  //   console.log(orderHistoryData);
 
   const getStatusTag = (status: string) => {
     switch (status) {

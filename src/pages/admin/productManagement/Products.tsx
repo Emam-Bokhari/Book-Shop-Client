@@ -30,7 +30,7 @@ export default function Products() {
     // { name: "limit", value: 5 },
     ...params,
   ]);
-  // console.log(productsData);
+
   const [deleteProduct] = useDeleteProductMutation();
 
   // Function to handle user deletion
@@ -62,7 +62,6 @@ export default function Products() {
   );
 
   const metaData = productsData?.meta;
-  // console.log(metaData);
 
   const columns = [
     {

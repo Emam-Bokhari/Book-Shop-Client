@@ -21,7 +21,6 @@ export default function ContactUs() {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "100vh",
-          // backgroundColor: "#f5f5f5",
           padding: "0px 16px",
           marginTop: "20px",
         }}
@@ -33,7 +32,6 @@ export default function ContactUs() {
             borderRadius: "8px",
             boxShadow: "none",
             border: "none",
-            // backgroundColor: "#fff",
           }}
         >
           <Title

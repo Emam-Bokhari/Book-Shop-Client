@@ -11,7 +11,6 @@ import {
 import { toast } from "sonner";
 import { TQueryParam } from "../../types/global";
 
-// src/types.ts
 export type User = {
   _id: string;
   key?: string;
@@ -41,18 +40,14 @@ export default function Users() {
     data: usersData,
     isFetching,
     refetch,
-  } = useGetAllUsersQuery([
-    { name: "page", value: currentPage },
-    // { name: "limit", value: 1 },
-    ...params,
-  ]);
+  } = useGetAllUsersQuery([{ name: "page", value: currentPage }, ...params]);
   const [updateUserRole] = useUpdateUserRoleMutation();
   const [updateUserStatus] = useUpdateUserStatusMutation();
   const [deleteUser] = useDeleteUserMutation();
 
   const tableData: (User & { key: string })[] = (usersData?.data || []).map(
     ({ name, role, email, createdAt, status, _id }) => ({
-      key: _id || "", // Ensure `key` is always a string
+      key: _id || "",
       name,
       email,
       role,
@@ -61,7 +56,7 @@ export default function Users() {
     })
   );
 
-  // Function to handle role update
+  // role update
   const handleRoleUpdate = async (value: string, userId: string) => {
     const toastId = toast.loading("Updating role...");
     try {
@@ -75,7 +70,7 @@ export default function Users() {
     }
   };
 
-  // Function to handle status update
+  // status update
   const handleStatusUpdate = async (value: string, userId: string) => {
     const toastId = toast.loading("Updating status...");
     try {
@@ -89,7 +84,7 @@ export default function Users() {
     }
   };
 
-  // Function to handle user deletion
+  //  user deletion
   const handleDeleteUser = async (userId: string) => {
     const toastId = toast.loading("Deleting user...");
     try {

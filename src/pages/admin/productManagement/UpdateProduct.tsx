@@ -23,7 +23,7 @@ export default function UpdateProduct() {
 
   const [updateProduct] = useUpdateProductMutation();
 
-  // Handle form submission to update the product
+  //  update the product
   const onSubmit = async (data: TProduct) => {
     const toastId = toast.loading("Updating product...");
 
@@ -48,7 +48,6 @@ export default function UpdateProduct() {
       });
       navigate("/products");
     } catch (err: any) {
-      console.error("Update Error:", err);
       const errorMessage =
         err?.data?.message ||
         err?.message ||
