@@ -9,6 +9,8 @@ export default function FilterSidebar({
   setCategoryFilter,
   inStockFilter,
   setInStockFilter,
+  priceRangeFilter,
+  setPriceRangeFilter,
 }) {
   const { token } = useToken();
   const [selectedCategory, setSelectedCategory] = useState(categoryFilter);
@@ -20,6 +22,10 @@ export default function FilterSidebar({
 
   const handleStockChange = (e) => {
     setInStockFilter(e.target.checked);
+  };
+
+  const handlePriceChange = (value) => {
+    setPriceRangeFilter(value);
   };
 
   return (
@@ -35,7 +41,17 @@ export default function FilterSidebar({
         <Title level={5} style={{ color: token.colorTextSecondary }}>
           Price Range
         </Title>
-        <Slider range min={0} max={5000} />
+        <Slider
+          range
+          min={0}
+          max={5000}
+          value={priceRangeFilter}
+          onChange={handlePriceChange}
+        />
+        <div>
+          <span>Min: {priceRangeFilter[0]}</span> -{" "}
+          <span>Max: {priceRangeFilter[1]}</span>
+        </div>
       </div>
       {/* category filter */}
       <div style={{ marginTop: "20px" }}>

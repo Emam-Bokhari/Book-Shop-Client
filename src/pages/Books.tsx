@@ -1,4 +1,4 @@
-import { Col, Input, Row, theme } from "antd";
+import { Col, Input, Pagination, Row, theme } from "antd";
 import { Fragment } from "react/jsx-runtime";
 import FilterSidebar from "../features/books/components/FilterSidebar";
 import Sort from "../features/books/components/Sort";
@@ -19,6 +19,9 @@ export default function Books() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All Categories");
   const [inStockFilter, setInStockFilter] = useState(false);
+  const [priceRangeFilter, setPriceRangeFilter] = useState<number[]>([0, 100]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
   const filteredBooks =
     booksData?.data?.filter(
@@ -28,8 +31,15 @@ export default function Books() {
         ) &&
         (categoryFilter === "All Categories" ||
           book.category === categoryFilter) &&
-        (!inStockFilter || book.quantity > 0)
+        (!inStockFilter || book.quantity > 0) &&
+        book.price >= priceRangeFilter[0] &&
+        book.price <= priceRangeFilter[1]
     ) || [];
+
+  const totalBooks = filteredBooks.length;
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedBooks = filteredBooks.slice(startIndex, endIndex);
 
   return (
     <Fragment>
@@ -41,17 +51,18 @@ export default function Books() {
           margin: "auto",
         }}
       >
-        {/* Left Sidebar (Filters) */}
+        {/* left sidebar Filters */}
         <Col xs={24} md={6}>
           <FilterSidebar
             categoryFilter={categoryFilter}
             setCategoryFilter={setCategoryFilter}
             inStockFilter={inStockFilter}
             setInStockFilter={setInStockFilter}
+            priceRangeFilter={priceRangeFilter}
+            setPriceRangeFilter={setPriceRangeFilter}
           />
         </Col>
 
-        {/* Books Display */}
         <Col xs={24} md={18}>
           {/* Search & Sort Section */}
           <div
@@ -80,9 +91,9 @@ export default function Books() {
                     <BookCardSkeleton />
                   </Col>
                 ))
-              : filteredBooks?.length > 0
-              ? filteredBooks?.map((book, _id) => (
-                  <Col xs={24} sm={12} md={12} lg={8} xxl={6} key={_id}>
+              : paginatedBooks.length > 0
+              ? paginatedBooks.map((book) => (
+                  <Col xs={24} sm={12} md={12} lg={8} xxl={6} key={book._id}>
                     <BookCard
                       id={book._id}
                       title={book.title}
@@ -103,6 +114,15 @@ export default function Books() {
                   </Col>
                 )}
           </Row>
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={totalBooks}
+            onChange={(page) => setCurrentPage(page)}
+            showSizeChanger={false}
+            style={{ marginTop: "20px" }}
+            align="end"
+          />
         </Col>
       </Row>
     </Fragment>
